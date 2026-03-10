@@ -1,0 +1,66 @@
+<form
+  #signinForm="ngForm"
+  class="space-y-3"
+  (ngSubmit)="onSigninSubmit(signinForm)"
+>
+  <div>
+    <tui-textfield
+      iconStart="@tui.mail"
+      class="mb-0!"
+      tuiTextfieldSize="m"
+    >
+      <label tuiLabel>E-pochta</label>
+      <input
+        placeholder="E-pochtani kiriting"
+        tuiTextfield
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        email
+        required
+      />
+    </tui-textfield>
+    <tui-error class="leading-6!" [error]="emailError" />
+  </div>
+
+  <div>
+    <tui-textfield
+      iconStart="@tui.lock"
+      class="mb-0!"
+      tuiTextfieldSize="m"
+    >
+      <label tuiLabel>Parol</label>
+      <input
+        placeholder="Parolni kiriting"
+        tuiTextfield
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        required
+        minlength="8"
+      />
+      <tui-icon tuiPassword />
+    </tui-textfield>
+    <tui-error class="leading-6!" [error]="passwordError" />
+    <div class="flex justify-end mt-1.5">
+      <a
+        routerLink="/auth/forgot-password"
+        class="font-semibold cursor-pointer no-underline hover:underline text-green-400 hover:text-green-500 transition-colors"
+      >
+        Parolni tiklash?
+      </a>
+    </div>
+  </div>
+  
+  <button
+    tuiButton
+    type="submit"
+    size="m"
+    appearance="accent"
+    class="font-medium! w-full"
+    [loading]="loadingProvider() === 'email'"
+    [disabled]="loadingProvider() !== null"
+  >
+    Kirish
+  </button>
+</form>
