@@ -25,6 +25,8 @@ export class AuthService {
   loadingProvider = this._loadingProvider.asReadonly();
 
   resendOtpLoading = signal(false);
+  private _passwordPattern = signal('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$');
+  passwordPattern = this._passwordPattern.asReadonly();
 
   constructor() {
     this.initAuth();
@@ -96,6 +98,7 @@ export class AuthService {
       return;
     }
 
+    sessionStorage.removeItem(storage.PENDING_EMAIL);
     this.getSession();
   }
 
@@ -136,6 +139,46 @@ export class AuthService {
     };
     localStorage.setItem(storage.AUTH_PROVIDER, 'email');
     this.getSession();
+  }
+
+  // FORGOT PASSWORD
+  async forgotPassword(email: string) {
+    this.setLoadingProvider('email');
+
+    const [{ error }] = await Promise.all([
+      this.supabase.client.auth.resetPasswordForEmail(email, {
+        redirectTo: `${window.location.origin}/auth/new-password`
+      }),
+      new Promise(resolve => setTimeout(resolve, 1500))
+    ]);
+
+    this.setLoadingProvider(null);
+    if (error) {
+      this.showNotification(this.getErrorMessage(error), 'negative');
+      return;
+    }
+
+    this.showNotification('E-pochtani tekshiring', 'positive');
+  }
+
+  // UPDATE PASSWORD
+  async updatePassword(password: string) {
+    this.setLoadingProvider('email');
+
+    const [{ error }] = await Promise.all([
+      this.supabase.client.auth.updateUser({ password }),
+      new Promise(resolve => setTimeout(resolve, 1500))
+    ]);
+
+    this.setLoadingProvider(null);
+
+    if (error) {
+      this.showNotification(this.getErrorMessage(error), 'negative');
+      return;
+    }
+
+    this.showNotification('Parol muvaffaqiyatli yangilandi', 'positive');
+    this.router.navigate([routes.auth.signIn]);
   }
 
   // SIGN IN WITH GOOGLE
