@@ -1,0 +1,27 @@
+<div class="grid grid-cols-2 gap-3">
+  <button
+    tuiButton
+    appearance="outline-grayscale"
+    type="button"
+    size="m"
+    class="font-medium! hover:bg-zinc-50! gap-2!"
+    (click)="signIn.emit('google')"
+    [loading]="loadingProvider() === 'google'"
+    [disabled]="loadingProvider() !== null"
+  >
+    <app-icon name="google" />
+    Google
+  </button>
+  <button
+    tuiButton
+    appearance="outline-grayscale"
+    type="button"
+    size="m"
+    class="font-medium! hover:bg-zinc-50! gap-2!"
+    [loading]="loadingProvider() === 'linkedin'"
+    disabled
+  >
+    <app-icon name="linkedin" />
+    Linkedin
+  </button>
+</div>
