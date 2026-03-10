@@ -1,0 +1,16 @@
+<button
+  tuiButton
+  appearance="outline-grayscale"
+  type="button"
+  size="m"
+  class="font-medium! hover:bg-zinc-50! w-full!"
+  [loading]="loadingProvider() === 'telegram'"
+  (click)="signInTelegram.emit()"
+>
+  <app-icon name="google" />
+  <div class="flex leading-none gap-px items-start flex-col">
+    Telegram
+    <span class="text-[11px] text-gray-700"></span>
+  </div>
+</button>
+<div class="telegram-widget"></div>
