@@ -34,7 +34,7 @@ export class VerifyEmailComponent implements OnInit {
   protected resendCooldown = signal(0);
 
   ngOnInit(): void {
-    if (!this.email) this.router.navigate([routes.auth.signUp]);
+    if (!this.email) this.router.navigate([routes.auth.SIGN_UP]);
   };
 
   onVerify() {
