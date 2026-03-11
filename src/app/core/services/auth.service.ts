@@ -34,14 +34,16 @@ export class AuthService {
     this.supabase.client.auth.onAuthStateChange((event, session) => {
       this._currentUser.set(session?.user ?? null);
 
-      if (event === 'PASSWORD_RECOVERY') {
-        sessionStorage.setItem(storage.PASSWORD_RECOVERY, 'true');
-        this.router.navigate([routes.auth.NEW_PASSWORD]);
-        return;
-      };
+      switch (event) {
+        case 'PASSWORD_RECOVERY':
+          sessionStorage.setItem(storage.PASSWORD_RECOVERY, 'true');
+          this.router.navigate([routes.auth.NEW_PASSWORD]);
+          break;
 
-      if (event === 'SIGNED_IN') {
-        this.router.navigate(['/']);
+        case 'SIGNED_IN':
+          if (sessionStorage.getItem(storage.PASSWORD_RECOVERY)) break;
+          this.router.navigate(['/']);
+          break;
       }
     });
   }
@@ -156,6 +158,7 @@ export class AuthService {
       return;
     };
     localStorage.setItem(storage.AUTH_PROVIDER, 'email');
+    this.router.navigate(['/']);
     this.getSession();
   }
 
@@ -243,7 +246,7 @@ export class AuthService {
   // SIGN OUT
   async signOut() {
     await this.supabase.client.auth.signOut();
-    window.location.href = '/';
+    this.router.navigate(['/'], { replaceUrl: true });
   };
 
   // SESSION
