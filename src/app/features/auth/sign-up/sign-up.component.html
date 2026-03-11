@@ -1,0 +1,85 @@
+<form
+  #signupForm="ngForm"
+  class="space-y-3"
+  (ngSubmit)="onSignupSubmit(signupForm)"
+>
+  <div>
+    <tui-textfield iconStart="@tui.user" class="mb-0!" tuiTextfieldSize="m">
+      <label tuiLabel>Ism, familiya</label>
+      <input
+        placeholder="Ismingizni kiriting"
+        tuiTextfield
+        type="text"
+        name="fullName"
+        [(ngModel)]="fullName"
+        required
+        minlength="2"
+      />
+    </tui-textfield>
+    <tui-error class="leading-6!" [error]="fullNameError" />
+  </div>
+
+  <div>
+    <tui-textfield iconStart="@tui.mail" class="mb-0!" tuiTextfieldSize="m">
+      <label tuiLabel>E-pochta</label>
+      <input
+        placeholder="E-pochtani kiriting"
+        tuiTextfield
+        type="email"
+        name="email"
+        [(ngModel)]="email"
+        email
+        required
+      />
+    </tui-textfield>
+    <tui-error class="leading-6!" [error]="emailError" />
+  </div>
+
+  <div>
+    <tui-textfield iconStart="@tui.lock" class="mb-0!" tuiTextfieldSize="m">
+      <label tuiLabel>Parol</label>
+      <input
+        placeholder="Kamida 8 ta belgi"
+        tuiTextfield
+        name="password"
+        type="password"
+        [(ngModel)]="password"
+        required
+        minlength="8"
+        [pattern]="passwordPattern()"
+      />
+      <tui-icon tuiPassword />
+    </tui-textfield>
+    <tui-error class="leading-6!" [error]="passwordError" />
+  </div>
+
+  <div>
+    <tui-textfield iconStart="@tui.lock" class="mb-0!" tuiTextfieldSize="m">
+      <label tuiLabel>Parolni tasdiqlash</label>
+      <input
+        placeholder="Parolni qayta kiriting"
+        tuiTextfield
+        name="confirmPassword"
+        type="password"
+        [(ngModel)]="confirmPassword"
+        required
+      />
+      <tui-icon tuiPassword />
+    </tui-textfield>
+    @if (password() !== confirmPassword() && confirmPassword()) {
+      <tui-error class="leading-6!" error="Parollar mos kelmadi" />
+    }
+  </div>
+
+  <button
+    tuiButton
+    type="submit"
+    size="m"
+    appearance="accent"
+    class="font-medium! w-full mt-2"
+    [loading]="loadingProvider() === 'email'"
+    [disabled]="signupForm.invalid || password() !== confirmPassword() || loadingProvider() !== null"
+  >
+    Ro'yxatdan o'tish
+  </button>
+</form>
