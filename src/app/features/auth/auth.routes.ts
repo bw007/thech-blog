@@ -1,10 +1,13 @@
 import { Routes } from '@angular/router';
+import { newPasswordGuard } from './guards/new-password.guard';
+import { newPasswordDeactivateGuard } from './guards/new-password-deactivate.guard';
+import { verifyEmailGuard } from './guards/verify-email.guard';
 
 export const authRoutes: Routes = [
   {
     path: '',
     pathMatch: 'full',
-    redirectTo: 'sign-in'
+    redirectTo: 'sign-in',
   },
   {
     path: 'full',
@@ -26,6 +29,7 @@ export const authRoutes: Routes = [
   {
     path: 'verify-email',
     loadComponent: () => import('@features/auth/verify-email/verify-email.component').then(m => m.VerifyEmailComponent),
+    canActivate: [verifyEmailGuard]
   },
   {
     path: 'forgot-password',
@@ -34,5 +38,7 @@ export const authRoutes: Routes = [
   {
     path: 'new-password',
     loadComponent: () => import('@features/auth/new-password/new-password.component').then(m => m.NewPasswordComponent),
+    canActivate: [newPasswordGuard],
+    canDeactivate: [newPasswordDeactivateGuard]
   }
 ];
