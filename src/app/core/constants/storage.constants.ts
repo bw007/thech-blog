@@ -1,4 +1,5 @@
 export const storage = {
-  AUTH_PROVIDER: 'auth-provider',
-  PENDING_EMAIL: 'pending-email'
+  AUTH_PROVIDER: 'auth_provider',
+  PENDING_EMAIL: 'pending_email',
+  PASSWORD_RECOVERY: 'password_recovery'
 } as const;
