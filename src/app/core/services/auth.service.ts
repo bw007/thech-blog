@@ -1,11 +1,11 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import type { AuthError, User } from '@supabase/supabase-js';
 import { TuiAlertService } from '@taiga-ui/core';
 import { Supabase } from '@core/config/supabase';
+import type { AuthProvider } from '@core/models/auth.model';
+import type { AuthError, User } from '@supabase/supabase-js';
 import { authErrors } from '@core/constants/error.constants';
 import { storage } from '@core/constants/storage.constants';
-import type { AuthProvider } from '@core/models/auth.model';
 import { routes } from '@core/constants/routes.constants';
 
 @Injectable({
@@ -33,7 +33,17 @@ export class AuthService {
 
     this.supabase.client.auth.onAuthStateChange((event, session) => {
       this._currentUser.set(session?.user ?? null);
-    })
+
+      if (event === 'PASSWORD_RECOVERY') {
+        sessionStorage.setItem(storage.PASSWORD_RECOVERY, 'true');
+        this.router.navigate([routes.auth.NEW_PASSWORD]);
+        return;
+      };
+
+      if (event === 'SIGNED_IN') {
+        this.router.navigate(['/']);
+      }
+    });
   }
 
   // SET PROVIDER
@@ -48,6 +58,15 @@ export class AuthService {
 
   // INIT AUTH
   private async initAuth() {
+    const isRecovery = sessionStorage.getItem(storage.PASSWORD_RECOVERY);
+    if (isRecovery) {
+      await this.supabase.client.auth.signOut();
+      sessionStorage.removeItem(storage.PASSWORD_RECOVERY);
+      this._isLoading.set(false);
+      this.router.navigate([routes.auth.SIGN_IN]);
+      return;
+    }
+
     const session = await this.getSession();
     this._currentUser.set(session?.user ?? null);
     this._isLoading.set(false);
@@ -55,8 +74,7 @@ export class AuthService {
 
   // SIGN UP WITH EMAIL
   async signUpWithEmail(fullName: string, email: string, password: string) {
-    this.setLoadingProvider('email')
-    localStorage.setItem(storage.AUTH_PROVIDER, 'email');
+    this.setLoadingProvider('email');
 
     const [{ error }] = await Promise.all([
       this.supabase.client.auth.signUp({
@@ -79,7 +97,7 @@ export class AuthService {
     };
     
     sessionStorage.setItem(storage.PENDING_EMAIL, email);
-    this.router.navigate([routes.auth.verifyEmail]);
+    this.router.navigate([routes.auth.VERIFY_EMAIL]);
   }
 
   // OTP VERIFICATION
@@ -133,7 +151,7 @@ export class AuthService {
       this.showNotification(this.getErrorMessage(error), 'negative',);
       if (error.code === 'email_not_confirmed') {
         sessionStorage.setItem(storage.PENDING_EMAIL, email);
-        this.router.navigate([routes.auth.verifyEmail]);
+        this.router.navigate([routes.auth.VERIFY_EMAIL]);
       }
       return;
     };
@@ -147,7 +165,7 @@ export class AuthService {
 
     const [{ error }] = await Promise.all([
       this.supabase.client.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/auth/new-password`
+        redirectTo: `${window.location.origin}${routes.auth.NEW_PASSWORD}`
       }),
       new Promise(resolve => setTimeout(resolve, 1500))
     ]);
@@ -177,8 +195,9 @@ export class AuthService {
       return;
     }
 
-    this.showNotification('Parol muvaffaqiyatli yangilandi', 'positive');
-    this.router.navigate([routes.auth.signIn]);
+    await this.supabase.client.auth.signOut();
+    this.showNotification('Parol yangilandi, qayta kiring', 'positive');
+    this.router.navigate([routes.auth.SIGN_IN]);
   }
 
   // SIGN IN WITH GOOGLE
@@ -231,7 +250,6 @@ export class AuthService {
   async getSession() {
     const { data } = await this.supabase.client.auth.getSession();
 
-    if (data.session) this.router.navigate(['/']);
     this.setLoadingProvider(null);
     localStorage.removeItem(storage.AUTH_PROVIDER);
     return data.session;
