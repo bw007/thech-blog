@@ -23,13 +23,16 @@ export class AuthService {
   currentUser = this._currentUser.asReadonly();
   isLoggedIn = computed(() => !!this._currentUser());
   loadingProvider = this._loadingProvider.asReadonly();
+  private _initialized = signal(false);
 
   resendOtpLoading = signal(false);
   private _passwordPattern = signal('^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&])[A-Za-z\\d@$!%*?&]+$');
   passwordPattern = this._passwordPattern.asReadonly();
 
   constructor() {
-    this.initAuth();
+    this.initAuth().then(() => {
+      this._initialized.set(true);
+    });
 
     this.supabase.client.auth.onAuthStateChange((event, session) => {
       this._currentUser.set(session?.user ?? null);
@@ -41,7 +44,17 @@ export class AuthService {
           break;
 
         case 'SIGNED_IN':
+          if (!this._initialized()) {
+            const isOAuth = !!localStorage.getItem(storage.AUTH_PROVIDER);
+            if (!isOAuth) break;
+          }
           if (sessionStorage.getItem(storage.PASSWORD_RECOVERY)) break;
+          if (this.router.url.startsWith('/auth')) {
+            this.router.navigate(['/']);
+          };
+          break;
+
+        case 'SIGNED_OUT':
           this.router.navigate(['/']);
           break;
       }

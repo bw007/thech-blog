@@ -1,3 +1,48 @@
 /* You can add global styles to this file, and also import other style files */
 
 @import "tailwindcss";
+
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@theme {
+  --color-app-bg: var(--app-bg);
+  --color-app-bg-alt: var(--app-bg-alt);
+  --color-app-card: var(--app-card);
+  --color-app-border: var(--app-border);
+  --color-app-text-primary: var(--app-text-primary);
+  --color-app-text-secondary: var(--app-text-secondary);
+  --color-app-text-muted: var(--app-text-muted);
+}
+
+@layer base {
+  /* Light mode */
+  :root {
+    --app-bg: #ffffff;
+    --app-bg-alt: #f9fafb;
+    --app-card: #ffffff;
+    --app-border: #f3f4f6;
+    --app-text-primary: #111827;
+    --app-text-secondary: #6b7280;
+    --app-text-muted: #9ca3af;
+  }
+
+  /* Dark mode */
+  [data-theme="dark"] {
+    --app-bg: #111827;
+    --app-bg-alt: #1f2937;
+    --app-card: #1f2937;
+    --app-border: #374151;
+    --app-text-primary: #f9fafb;
+    --app-text-secondary: #9ca3af;
+    --app-text-muted: #6b7280;
+  }
+
+  /* Taiga override */
+  [tuitheme="dark"] {
+    --tui-background-base: #111827 !important;
+    --tui-background-base-alt: #1f2937 !important;
+    --tui-background-elevation-1: #1f2937 !important;
+    --tui-background-elevation-2: #1f2937 !important;
+    --tui-background-elevation-3: #161f2e !important;
+  }
+}
