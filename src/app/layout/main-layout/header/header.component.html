@@ -1,38 +1,60 @@
 <header class="sticky top-0 z-50 backdrop-blur-md border-b border-app-border bg-app-bg/80">
-  <div class="max-w-7xl mx-auto px-6 h-16 flex items-center gap-8">
+  <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4 md:gap-8">
+    <div class="flex items-center gap-4">
+      <button
+        (click)="open.set(!open())"
+        class="md:hidden cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors"
+      >
+        <tui-icon [icon]="open() ? '@tui.x' : '@tui.menu'" [style.height.rem]="1.2" />
+      </button>
 
-    <a routerLink="/" class="flex items-center gap-2 text-app-text-primary no-underline">
-      <span class="w-2.5 h-2.5 bg-green-400 rounded-full"></span>
-      <span class="text-lg tracking-tight">thech<strong class="text-green-400">blog</strong></span>
-    </a>
+      <a routerLink="/" class="flex items-center gap-2 text-app-text-primary no-underline">
+        <span class="w-2.5 h-2.5 bg-green-400 rounded-full"></span>
+        <span class="text-lg tracking-tight"
+          >thech<strong class="text-green-400">blog</strong></span
+        >
+      </a>
+    </div>
 
-    <nav class="flex items-center gap-1 flex-1">
-      <a routerLink="#"
-        class="px-3 py-1.5 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline">Bosh
-        sahifa</a>
-      <a routerLink="#"
-        class="px-3 py-1.5 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline">Maqolalar</a>
+    <nav class="hidden md:flex items-center gap-1 flex-1">
+      <a
+        routerLink="#"
+        class="px-3 py-1.5 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
+        >Bosh sahifa</a
+      >
+      <a
+        routerLink="#"
+        class="px-3 py-1.5 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
+        >Maqolalar</a
+      >
     </nav>
 
     <div class="flex items-center gap-2">
-      <button class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors">
+      <button
+        class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors"
+      >
         <tui-icon icon="@tui.search" [style.height.rem]="1" />
       </button>
-      
+
       <button
         (click)="themeToggle()"
-        class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full bg-app-bg-alt text-app-text-secondary hover:text-app-text-primary hover:bg-app-border transition-colors"
+        class="cursor-pointer w-8 h-8 items-center justify-center rounded-full bg-app-bg-alt text-app-text-secondary hover:text-app-text-primary hover:bg-app-border transition-colors hidden sm:flex"
       >
         <tui-icon [icon]="darkMode() ? '@tui.sun' : '@tui.moon'" [style.height.rem]="1" />
       </button>
-      <button tuiButton appearance="flat" class="text-app-text-primary! flex items-center gap-2! px-4! hover:opacity-75!" size="s" routerLink="#">
-        <tui-icon
-          icon="@tui.notebook-pen"
-          [style.height.rem]="1"
-        />
-        Maqola yozish
+
+      <button
+        tuiButton
+        appearance="flat"
+        class="text-app-text-primary! flex items-center gap-1! sm:gap-2! px-2! sm:px-4! hover:opacity-75!"
+        size="s"
+        routerLink="#"
+      >
+        <tui-icon icon="@tui.notebook-pen" [style.height.rem]="1" />
+        <span class="hidden sm:inline">Maqola yozish</span>
       </button>
-      @if ((isLoggedIn() || isLoading())) {
+
+      @if (isLoggedIn() || isLoading()) {
         <tui-avatar
           src="@tui.user"
           size="m"
@@ -44,87 +66,170 @@
           [(tuiDropdownOpen)]="dropdownOpen"
         />
         <ng-template #content>
-
-            <div class="flex items-center gap-2.5 px-1.5 py-3 mx-2 border-b border-b-(--tui-border-normal)">
-              <tui-avatar src="@tui.user" size="s" />
-              <div class="flex flex-col overflow-hidden pr-2">
-                <span class="text-sm font-semibold text-app-text-primary whitespace-nowrap overflow-hidden text-ellipsis">Lazizbek Hasanov</span>
-                <span class="text-xs text-app-text-secondary whitespace-nowrap overflow-hidden text-ellipsis">mr.khasanov02@gmail.com</span>
-              </div>
+          <div
+            class="flex items-center gap-2.5 px-1.5 py-3 mx-2 border-b border-b-(--tui-border-normal)"
+          >
+            <tui-avatar src="@tui.user" size="s" />
+            <div class="flex flex-col overflow-hidden pr-2">
+              <span
+                class="text-sm font-semibold text-app-text-primary whitespace-nowrap overflow-hidden text-ellipsis"
+                >Lazizbek Hasanov</span
+              >
+              <span
+                class="text-xs text-app-text-secondary whitespace-nowrap overflow-hidden text-ellipsis"
+                >mr.khasanov02@gmail.com</span
+              >
             </div>
+          </div>
 
-            <tui-data-list tuiDataListDropdownManager size="m">
+          <tui-data-list tuiDataListDropdownManager size="m">
+            <tui-opt-group>
+              <button
+                routerLink="profile/overview"
+                tuiOption
+                new
+                type="button"
+                routerLinkActive="text-app-text-primary! bg-app-bg-alt!"
+                class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
+              >
+                <tui-icon
+                  class="text-app-text-secondary!"
+                  icon="@tui.user"
+                  [style.height.rem]="1"
+                />
+                Profil
+              </button>
+              <button
+                routerLink="#"
+                tuiOption
+                new
+                type="button"
+                routerLinkActive="text-app-text-primary! bg-app-bg-alt!"
+                class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
+              >
+                <tui-icon
+                  class="text-app-text-secondary!"
+                  icon="@tui.message-circle-question-mark"
+                  [style.height.rem]="1"
+                />
+                Yordam
+              </button>
+              <button
+                routerLink="profile/settings"
+                tuiOption
+                new
+                type="button"
+                routerLinkActive="text-app-text-primary! bg-app-bg-alt!"
+                class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
+              >
+                <tui-icon
+                  class="text-app-text-secondary!"
+                  icon="@tui.settings"
+                  [style.height.rem]="1"
+                />
+                Sozlamalar
+              </button>
+            </tui-opt-group>
 
-              <tui-opt-group>
-                <button
-                  routerLink="profile"
-                  tuiOption
-                  new
-                  type="button"
-                  class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
-                >
-                  <tui-icon
-                    class="text-app-text-secondary!"
-                    icon="@tui.user"
-                    [style.height.rem]="1"
-                  />
-                  Profil
-                </button>
-                <button
-                  routerLink="#"
-                  tuiOption
-                  new
-                  type="button"
-                  class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
-                >
-                  <tui-icon
-                    class="text-app-text-secondary!"
-                    icon="@tui.file-text"
-                    [style.height.rem]="1"
-                  />
-                  Mening postlarim
-                </button>
-                <button
-                  routerLink="#"
-                  tuiOption
-                  new
-                  type="button"
-                  class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
-                >
-                  <tui-icon
-                    class="text-app-text-secondary!"
-                    icon="@tui.settings"
-                    [style.height.rem]="1"
-                  />
-                  Sozlamalar
-                </button>
-              </tui-opt-group>
-
-              <tui-opt-group>
-                <button
-                  tuiOption new
-                  type="button"
-                  (click)="signOut()"
-                  class="text-orange-500! hover:text-orange-600! dark:text-orange-400! dark:hover:text-orange-500! transition-colors!"
-                >
-                  <tui-icon icon="@tui.log-out" [style.height.rem]="1" />
-                  Chiqish
-                </button>
-              </tui-opt-group>
-
-            </tui-data-list>
+            <tui-opt-group>
+              <button
+                tuiOption
+                new
+                type="button"
+                (click)="signOut()"
+                class="text-orange-500! hover:text-orange-600! dark:text-orange-400! dark:hover:text-orange-500! transition-colors!"
+              >
+                <tui-icon icon="@tui.log-out" [style.height.rem]="1" />
+                Chiqish
+              </button>
+            </tui-opt-group>
+          </tui-data-list>
         </ng-template>
       } @else {
         <button
           tuiButton
-          class="px-6!"
+          class="px-4! sm:px-6!"
           appearance="accent"
           size="s"
           routerLink="auth/full/sign-in"
         >
           Kirish
-        </button> 
+        </button>
       }
     </div>
   </div>
+
+  <tui-drawer
+    *tuiPopup="open()"
+    [overlay]="true"
+    (click.self)="open.set(false)"
+    class="top-0! rounded-none! w-64! bg-app-bg! border-r! border-app-border!"
+  >
+    <header class="bg-app-bg! h-16! py-0! px-8!">
+      <h2 tuiHeader class="flex h-full items-center justify-between">
+        <a
+          routerLink="/"
+          class="flex items-center gap-2 text-app-text-primary no-underline"
+          (click)="open.set(false)"
+        >
+          <span class="w-2.5 h-2.5 bg-green-400 rounded-full"></span>
+          <span class="text-lg tracking-tight"
+            >thech<strong class="text-green-400">blog</strong></span
+          >
+        </a>
+        <div tuiAccessories>
+          <button
+            (click)="open.set(!open())"
+            class="md:hidden cursor-pointer w-8 h-8 flex items-center justify-center rounded-lg text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors"
+          >
+            <tui-icon icon="@tui.x" [style.height.rem]="1" />
+          </button>
+        </div>
+      </h2>
+    </header>
+    <div class="flex flex-col h-full">
+      <div class="flex flex-col gap-1">
+        <a
+          routerLink="#"
+          (click)="open.set(false)"
+          class="px-3 py-2 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
+        >
+          Bosh sahifa
+        </a>
+        <a
+          routerLink="#"
+          (click)="open.set(false)"
+          class="px-3 py-2 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
+        >
+          Maqolalar
+        </a>
+      </div>
+
+      <div class="my-6">
+        <button
+          tuiButton
+          appearance="secondary"
+          class="w-full text-app-text-primary! flex items-center justify-start gap-2! hover:bg-app-bg-alt! hover:opacity-100! transition-colors"
+          size="s"
+          routerLink="#"
+          (click)="open.set(false)"
+        >
+          <tui-icon icon="@tui.notebook-pen" [style.height.rem]="1" />
+          <span class="text-sm font-normal">Maqola yozish</span>
+        </button>
+      </div>
+
+      <div
+        class="mt-auto border-t border-app-border pt-4 -mx-6 px-9 flex items-center justify-between"
+      >
+        <span class="text-sm text-app-text-secondary">Tungi rejim</span>
+        <button
+          (click)="themeToggle()"
+          class="cursor-pointer w-8 h-8 flex items-center justify-center rounded-full bg-app-bg-alt text-app-text-secondary hover:text-app-text-primary hover:bg-app-border transition-colors"
+        >
+          <tui-icon [icon]="darkMode() ? '@tui.sun' : '@tui.moon'" [style.height.rem]="1" />
+        </button>
+      </div>
+    </div>
+  </tui-drawer>
 </header>

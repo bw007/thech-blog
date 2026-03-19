@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TuiButton, TuiIcon } from '@taiga-ui/core';
+import { RouterLink, RouterLinkActive } from '@angular/router';
+import { TuiButton, TuiIcon, TuiPopup } from '@taiga-ui/core';
 import { TuiDataList, TuiDropdown } from '@taiga-ui/core';
-import { TuiDataListDropdownManager, TuiAvatar, TuiAvatarOutline } from '@taiga-ui/kit';
+import { TuiDataListDropdownManager, TuiAvatar, TuiAvatarOutline, TuiDrawer } from '@taiga-ui/kit';
 import { AuthService } from '@core/services/auth.service';
 import { ThemeService } from '@core/services/theme.service';
 
@@ -18,8 +18,11 @@ import { ThemeService } from '@core/services/theme.service';
     TuiDataListDropdownManager,
     TuiDropdown,
     TuiAvatar,
-    TuiAvatarOutline
-  ]
+    TuiAvatarOutline,
+    TuiDrawer,
+    TuiPopup,
+    RouterLinkActive
+]
 })
 export class HeaderComponent {
   private theme = inject(ThemeService);
@@ -29,6 +32,8 @@ export class HeaderComponent {
   protected readonly isLoggedIn = this.auth.isLoggedIn;
   protected readonly isLoading = this.auth.isLoading;
   protected readonly darkMode = this.theme.darkMode;
+
+  protected readonly open = signal(false);
 
   themeToggle() {
     this.theme.themeToggle()
