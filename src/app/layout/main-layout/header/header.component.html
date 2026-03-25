@@ -18,14 +18,9 @@
 
     <nav class="hidden md:flex items-center gap-1 flex-1">
       <a
-        routerLink="#"
+        routerLink="/"
         class="px-3 py-1.5 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
         >Bosh sahifa</a
-      >
-      <a
-        routerLink="#"
-        class="px-3 py-1.5 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
-        >Maqolalar</a
       >
     </nav>
 
@@ -48,7 +43,7 @@
         appearance="flat"
         class="text-app-text-primary! flex items-center gap-1! sm:gap-2! px-2! sm:px-4! hover:opacity-75!"
         size="s"
-        routerLink="#"
+        routerLink="editor"
       >
         <tui-icon icon="@tui.notebook-pen" [style.height.rem]="1" />
         <span class="hidden sm:inline">Maqola yozish</span>
@@ -190,18 +185,11 @@
     <div class="flex flex-col h-full">
       <div class="flex flex-col gap-1">
         <a
-          routerLink="#"
+          routerLink="/"
           (click)="open.set(false)"
           class="px-3 py-2 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
         >
           Bosh sahifa
-        </a>
-        <a
-          routerLink="#"
-          (click)="open.set(false)"
-          class="px-3 py-2 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
-        >
-          Maqolalar
         </a>
       </div>
 
