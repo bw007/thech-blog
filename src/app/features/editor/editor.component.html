@@ -1,0 +1,339 @@
+<div class="h-screen bg-app-bg flex flex-col overflow-hidden text-app-text-primary">
+
+  <header class="sticky top-0 z-50 backdrop-blur-md border-b border-app-border bg-app-bg/80 shrink-0">
+    <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4 md:gap-8">
+
+      <div class="flex items-center gap-4">
+        <a routerLink="/" class="flex items-center gap-2 text-app-text-primary no-underline">
+          <span class="w-2.5 h-2.5 bg-green-400 rounded-full"></span>
+          <span class="text-lg tracking-tight">thech<strong class="text-green-400">blog</strong></span>
+        </a>
+        <div class="relative overflow-hidden h-5 mb-auto mt-0.5 mr-2 hidden sm:block">
+          @if (uploadingImages().size > 0) {
+            <span class="status-text text-xs text-app-text-secondary opacity-50! inline-flex items-center whitespace-nowrap">
+              <tui-icon icon="@tui.loader-circle" [style.height.rem]="0.75" class="animate-spin" />
+              Yuklanmoqda...
+            </span>
+          } @else if (saving()) {
+            <span class="status-text text-xs text-app-text-secondary opacity-50! inline-flex items-center whitespace-nowrap">
+              Saqlanmoqda...
+            </span>
+          } @else if (articleId()) {
+            <span class="status-text text-xs text-app-text-secondary inline-flex items-center whitespace-nowrap">
+              Saqlandi
+            </span>
+          }
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2">      
+        <button
+          (click)="themeToggle()"
+          class="cursor-pointer w-8! h-8! flex items-center justify-center rounded-full bg-app-bg-alt text-app-text-secondary hover:text-app-text-primary hover:bg-app-border transition-colors"
+        >
+          <tui-icon [icon]="darkMode() ? '@tui.sun' : '@tui.moon'" [style.height.rem]="1" />
+        </button>
+
+        <button
+          tuiButton
+          appearance="flat"
+          size="s"
+          class="text-app-text-secondary! hover:text-app-text-primary! w-8 sm:w-auto h-8 sm:h-auto flex items-center gap-1! sm:gap-2! px-2! sm:px-4!"
+        >
+          <tui-icon icon="@tui.settings" [style.height.rem]="1" />
+          <span class="hidden sm:inline">Sozlamalar</span>
+        </button>
+
+        <button class="cursor-pointer w-8! h-8! flex items-center justify-center rounded-lg bg-app-bg-alt text-app-text-secondary hover:text-app-text-primary hover:bg-app-border transition-colors">
+          <tui-icon icon="@tui.command" [style.height.rem]="1" />
+        </button>
+
+        <button
+          tuiButton
+          appearance="primary"
+          size="s"
+          class="bg-green-500! hover:bg-green-600! text-white! border-none! px-4! sm:px-6!"
+        >
+          Chop etish
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="grow overflow-auto relative px-4 md:px-6">
+    <div class="max-w-4xl mx-auto w-full py-12 pl-4">
+      <textarea
+        class="w-full bg-transparent border-none text-3xl md:text-4xl lg:text-5xl font-bold text-app-text-primary placeholder:text-app-text-muted/50 focus:ring-0 focus:outline-none resize-none overflow-hidden leading-tight mb-4"
+        placeholder="Sarlavha"
+        rows="1"
+        #titleInput
+        name="title"
+        [(ngModel)]="title"
+        (ngModelChange)="onTitleChange()"
+        (keydown.enter)="onTitleEnter($event)"
+        oninput="this.style.height=''; this.style.height=this.scrollHeight+'px';"
+      ></textarea>
+
+      <tiptap-editor
+        [editor]="editor"
+        [(ngModel)]="content"
+        [class.opacity-0]="!editorReady()"
+      />
+
+      <tiptap-floating-menu
+        [editor]="editor"
+        class="mt-10"
+        [class.opacity-0]="!editorReady()"
+      >
+        <div class="flex items-center gap-0.5 bg-app-bg-alt border border-app-border rounded-xl shadow-sm px-2 py-1.5 transition-all">
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Rasm yuklash"
+            (click)="imageInput.click()"
+          >
+            <tui-icon
+              icon="@tui.image"
+              [style.height.rem]="1.125"
+              class="text-app-text-secondary hover:text-app-text-primary transition-colors"
+            />
+          </button>
+          <input 
+            type="file" 
+            #imageInput 
+            accept="image/*" 
+            name="image"
+            (change)="onImageSelected($event)" 
+            class="hidden"
+          />
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Unsplash'dan rasm"
+            (click)="editor.chain().focus().run()"
+            disabled
+          >
+            <tui-icon
+              icon="@tui.image-down"
+              [style.height.rem]="1.125"
+              class="text-app-text-secondary transition-colors"
+            />
+          </button>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Video yuklash"
+            (click)="editor.chain().focus().run()"
+            disabled
+          >
+            <tui-icon
+              icon="@tui.tv-minimal-play"
+              [style.height.rem]="1.125"
+              class="text-app-text-secondary transition-colors"
+            />
+          </button>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Obyekt joylashtirish"
+            (click)="editor.chain().focus().run()"
+            disabled
+          >
+            <tui-icon
+              icon="@tui.braces"
+              [style.height.rem]="1.125"
+              class="text-app-text-secondary transition-colors"
+            />
+          </button>
+
+          <div class="w-px h-5 bg-app-border mx-0.5"></div>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Kod qat'ori"
+            [class.text-green-400!]="editor.isActive('codeBlock')"
+            (click)="editor.chain().focus().toggleCodeBlock().run()"
+            disabled
+          >
+            <tui-icon
+              icon="@tui.code"
+              [style.height.rem]="1.125"
+              class="text-app-text-secondary transition-colors"
+            />
+          </button>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Ajratuvchi"
+            (click)="editor.chain().focus().setHorizontalRule().run()"
+          >
+            <tui-icon
+              icon="@tui.ellipsis"
+              [style.height.rem]="1.125"
+              class="text-app-text-secondary transition-colors"
+            />
+          </button>
+
+        </div>
+      </tiptap-floating-menu>
+
+      <tiptap-bubble-menu
+        [editor]="editor"
+        [shouldShow]="shouldShowBubbleMenu"
+        [class.opacity-0]="!editorReady()"
+      >
+        <div class="relative flex items-center gap-0.5 bg-app-bg-alt border border-app-border rounded-xl shadow-sm px-2 py-1.5 transition-all">
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Qalin"
+            [class.bg-app-bg-gray!]="editor.isActive('bold')"
+            (click)="editor.chain().focus().toggleBold().run()"
+          >
+            <tui-icon
+              icon="@tui.bold"
+              [style.height.rem]="1.125"
+              [class.text-app-text-primary!]="editor.isActive('bold')"
+              class="text-app-text-secondary hover:text-app-text-primary transition-colors"
+            />
+          </button>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Kursiv"
+            [class.bg-app-bg-gray!]= "editor.isActive('italic')"
+            (click)="editor.chain().focus().toggleItalic().run()"
+          >
+            <tui-icon
+              icon="@tui.italic"
+              [style.height.rem]="1.125"
+              [class.text-app-text-primary!]= "editor.isActive('italic')"
+              class="text-app-text-secondary hover:text-app-text-primary transition-colors"
+            />
+          </button>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="O'chirilgan"
+            [class.bg-app-bg-gray!]= "editor.isActive('strike')"
+            (click)="editor.chain().focus().toggleStrike().run()"
+          >
+            <tui-icon
+              icon="@tui.strikethrough"
+              [style.height.rem]="1.125"
+              [class.text-app-text-primary!]= "editor.isActive('strike')"
+              class="text-app-text-secondary hover:text-app-text-primary transition-colors"
+            />
+          </button>
+
+          <div class="w-px h-5 bg-app-border mx-0.5"></div>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Katta sarlavha"
+            [class.bg-app-bg-gray!]= "editor.isActive('heading', { level: 1 })"
+            (click)="editor.chain().focus().toggleHeading({ level: 1 }).run()"
+          >
+            <span
+              [class.text-app-text-primary!]= "editor.isActive('heading', { level: 1 })"
+              class="w-4 text-sm font-bold text-app-text-secondary hover:text-app-text-primary transition-colors"
+            >
+              H1
+            </span>
+          </button>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="O'rta sarlavha"
+            [class.bg-app-bg-gray!]= "editor.isActive('heading', { level: 2 })"
+            (click)="editor.chain().focus().toggleHeading({ level: 2 }).run()"
+          >
+            <span
+              [class.text-app-text-primary!]= "editor.isActive('heading', { level: 2 })"
+              class="w-4 text-sm font-bold text-app-text-secondary hover:text-app-text-primary transition-colors"
+            >
+              H2
+            </span>
+          </button>
+
+          <div class="w-px h-5 bg-app-border mx-0.5"></div>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Iqtibos"
+            [class.bg-app-bg-gray!]= "editor.isActive('blockquote')"
+            (click)="editor.chain().focus().toggleBlockquote().run()"
+          >
+            <tui-icon
+              icon="@tui.quote"
+              [style.height.rem]="1.125"
+              [class.text-app-text-primary!]= "editor.isActive('blockquote')"
+              class="text-app-text-secondary hover:text-app-text-primary transition-colors"
+            />
+          </button>
+
+          <button
+            tuiButton
+            appearance="flat"
+            size="s"
+            title="Havola"
+            [class.bg-app-bg-gray!]= "editor.isActive('link')"
+            (click)="openLink()"
+          >
+            <tui-icon
+              icon="@tui.link"
+              [style.height.rem]="1.125"
+              [class.text-app-text-primary!]= "editor.isActive('link')"
+              class="text-app-text-secondary hover:text-app-text-primary transition-colors"
+            />
+          </button>
+          @if (isLink()) {
+            <tui-textfield
+              tuiTextfieldSize="s"
+              iconStart="@tui.link"
+              class="absolute! top-0! left-0! h-full! w-full!"
+            >
+              <input
+                class="shadow-none! border-none! outline-none! bg-app-bg-alt!"
+                placeholder="Havola"
+                tuiTextfield
+                #linkInput
+                name="link"
+                (blur)="setLink()"
+                [(ngModel)]="link"
+                (keydown.escape)="isLink.set(false)"
+                (keydown.enter)="setLink()"
+              />
+            </tui-textfield>
+          }
+          
+        </div>
+      </tiptap-bubble-menu>
+    </div>
+    
+  </main>
+</div>
