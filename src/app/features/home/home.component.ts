@@ -16,5 +16,5 @@ import { TuiIcon } from "@taiga-ui/core";
 export class HomeComponent {
   private article = inject(ArticleService);
 
-  articles = this.article.getLatestArticles();
+  articles = this.article.latestArticles;
 }
