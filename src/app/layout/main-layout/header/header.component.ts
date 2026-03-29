@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
 import { TuiButton, TuiIcon, TuiPopup } from '@taiga-ui/core';
 import { TuiDataList, TuiDropdown } from '@taiga-ui/core';
@@ -11,18 +11,17 @@ import { ThemeService } from '@core/services/theme.service';
   templateUrl: './header.component.html',
   imports: [
     RouterLink,
+    RouterLinkActive,
     TuiButton,
     TuiIcon,
-    TuiButton,
     TuiDataList,
     TuiDataListDropdownManager,
     TuiDropdown,
     TuiAvatar,
     TuiAvatarOutline,
     TuiDrawer,
-    TuiPopup,
-    RouterLinkActive
-]
+    TuiPopup
+  ]
 })
 export class HeaderComponent {
   private theme = inject(ThemeService);
@@ -36,10 +35,10 @@ export class HeaderComponent {
   protected readonly open = signal(false);
 
   themeToggle() {
-    this.theme.themeToggle()
-  }
+    this.theme.themeToggle();
+  };
 
   signOut() {
     this.auth.signOut();
-  }
+  };
 }

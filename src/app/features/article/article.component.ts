@@ -1,30 +1,21 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { CommonModule, DatePipe } from '@angular/common';
+import { Component, inject } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
-import { ArticleService } from '@core/services/article.service';
-import { Article } from '@core/models/article.model';
+import { DatePipe } from '@angular/common';
 import { TuiButton, TuiIcon } from "@taiga-ui/core";
+import type { Article } from '@core/models/article.model';
 
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
   imports: [
     RouterLink,
-    DatePipe,
     TuiButton,
-    TuiIcon
+    TuiIcon,
+    DatePipe
   ],
 })
-export class ArticleComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private articleService = inject(ArticleService);
+export class ArticleComponent {
+  private readonly route = inject(ActivatedRoute);
 
-  article = signal<Article | undefined>(undefined);
-
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.article.set(this.articleService.getArticleById(id));
-    }
-  }
+  protected readonly article = this.route.snapshot.data['article'] as Article;
 }

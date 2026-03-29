@@ -13,11 +13,23 @@ export class EditorService {
   private auth = inject(AuthService);
   private supabase = inject(Supabase);
 
+  private _myArticles = signal<Article[]>([]);
+  myArticles = this._myArticles.asReadonly();
+
+  // Get my articles
+  getMyArticles() {
+    return this.http.get<Article[]>(`articles?author_id=eq.${this.auth.currentUser()?.id}`)
+      .pipe(
+        tap((articles) => this._myArticles.set(articles))
+      );
+  }
+
   // Get article draft
   getDraftArticle(id: string) {
-    return this.http.get<Article[]>(`articles?id=eq.${id}`).pipe(
-      map((articles) => articles[0])
-    );
+    return this.http.get<Article[]>(`articles?id=eq.${id}`)
+      .pipe(
+        map((articles) => articles[0])
+      );
   }
 
   // Create article draft
@@ -45,8 +57,7 @@ export class EditorService {
     return await firstValueFrom(
       this.http.patch<Article[]>(`articles?id=eq.${id}`, {
         title,
-        content,
-        status: 'draft'
+        content
       }).pipe(
         map((articles) => articles[0])
       )
