@@ -17,10 +17,12 @@ export class AuthService {
   private readonly alerts = inject(TuiAlertService);
 
   private _currentUser = signal<User | null>(null);
+  private _userProfile = signal<any>(null);
   private _isLoading = signal(this.hasStoredSession());
   private _loadingProvider = signal<AuthProvider>(null);
   isLoading = this._isLoading.asReadonly();
   currentUser = this._currentUser.asReadonly();
+  userProfile = this._userProfile.asReadonly();
   isLoggedIn = computed(() => !!this._currentUser());
   loadingProvider = this._loadingProvider.asReadonly();
   private _initialized = signal(false);
@@ -85,6 +87,21 @@ export class AuthService {
     const session = await this.getSession();
     this._currentUser.set(session?.user ?? null);
     this._isLoading.set(false);
+  }
+
+  // GET USER PROFILE
+  async getUserProfile(userId: string) {
+    const { data, error } = await this.supabase.client
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+    if (error) {
+      this.showNotification(error.message, 'negative');
+      return;
+    }
+    
+    this._userProfile.set(data);
   }
 
   // SIGN UP WITH EMAIL
@@ -274,6 +291,7 @@ export class AuthService {
   // USER
   async getUser() {
     const { data } = await this.supabase.client.auth.getUser();
+    await this.getUserProfile(data.user?.id!);
     return data.user;
   }
 
