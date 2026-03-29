@@ -7,7 +7,8 @@ const env = `export const environment = {
     api_key: '${process.env.SUPABASE_KEY}'
   },
   telegram: {
-    bot_token: '${process.env.TELEGRAM_BOT_TOKEN}'
+    bot_token: '${process.env.TELEGRAM_BOT_TOKEN}',
+    verification_bot: '${process.env.TELEGRAM_VERIFICATION_BOT}'
   }
 };
 `;
