@@ -1,5 +1,6 @@
 import { Routes } from '@angular/router';
 import { authGuard } from '@core/guards/auth.guard';
+import { articleResolver } from '@core/resolvers/article.resolver';
 
 export const mainRoutes: Routes = [
   {
@@ -8,7 +9,8 @@ export const mainRoutes: Routes = [
   },
   {
     path: 'article/:id',
-    loadComponent: () => import('@features/article/article.component').then(m => m.ArticleComponent)
+    loadComponent: () => import('@features/article/article.component').then(m => m.ArticleComponent),
+    resolve: { article: articleResolver }
   },
   {
     path: 'profile',
