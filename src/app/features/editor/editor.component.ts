@@ -1,28 +1,23 @@
 import { AfterViewInit, Component, DestroyRef, ElementRef, inject, OnDestroy, signal, viewChild } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { TuiButton, TuiHint, TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { debounceTime, Subject } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
+import { TuiButton, TuiHint, TuiIcon, TuiTextfield } from '@taiga-ui/core';
+import { TiptapEditorDirective, TiptapBubbleMenuDirective, TiptapFloatingMenuDirective } from 'ngx-tiptap';
 import { Editor } from '@tiptap/core';
 import { StarterKit } from '@tiptap/starter-kit';
 import { Placeholder } from '@tiptap/extension-placeholder';
 import { FileHandler } from '@tiptap/extension-file-handler';
 import { Image } from '@tiptap/extension-image';
-
-import {
-  TiptapEditorDirective,
-  TiptapBubbleMenuDirective,
-  TiptapFloatingMenuDirective
-} from 'ngx-tiptap';
+import { Figcaption, Figure } from './extensions/figure.extension';
+import { NoMultipleSpaces } from './extensions/no-multiple-spaces.extension';
 
 import { ThemeService } from '@core/services/theme.service';
 import { EditorService } from '@core/services/editor.service';
-import { debounceTime, Subject } from 'rxjs';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { Article } from '@core/models/article.model';
-import { Location } from '@angular/common';
-import { Figcaption, Figure } from './extensions/figure.extension';
-import { NoMultipleSpaces } from './extensions/no-multiple-spaces.extension';
 
 @Component({
   selector: 'app-editor',
@@ -45,14 +40,13 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   private location = inject(Location);
   private theme = inject(ThemeService);
   private editorService = inject(EditorService);
-  protected readonly darkMode = this.theme.darkMode;
 
   private titleInput = viewChild<ElementRef<HTMLTextAreaElement>>('titleInput');
   private readonly linkInput = viewChild<ElementRef<HTMLInputElement>>('linkInput');
 
   private saveSubject = new Subject<void>();
   protected readonly articleId = signal<string | null>(null);
-
+  protected readonly darkMode = this.theme.darkMode;
   protected title = signal('');
   protected link = signal('');
   protected isLink = signal(false);
