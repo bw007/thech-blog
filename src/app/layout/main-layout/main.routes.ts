@@ -8,8 +8,12 @@ export const mainRoutes: Routes = [
     loadComponent: () => import('@features/home/home.component').then(m => m.HomeComponent)
   },
   {
+    path: 'articles',
+    loadChildren: () => import('@features/articles/articles.routes').then(m => m.articlesRoutes)
+  },
+  {
     path: 'article/:id',
-    loadComponent: () => import('@features/article/article.component').then(m => m.ArticleComponent),
+    loadComponent: () => import('@features/articles/article-detail/article-detail.component').then(m => m.ArticleComponent),
     resolve: { article: articleResolver }
   },
   {
