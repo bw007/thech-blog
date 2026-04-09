@@ -33,7 +33,7 @@ export class ArticleService {
 
   // Get article by id
   getArticleById(id: string) {
-    return this.http.get<Article[]>(`articles?id=eq.${id}`).pipe(
+    return this.http.get<Article[]>(`articles?id=eq.${id}&select=*,author:profiles(username,full_name,avatar_url)`).pipe(
       map((articles) => articles[0])
     );
   };
