@@ -1,10 +1,10 @@
-import { Component, inject, INJECTOR, OnInit, signal } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { catchError, finalize, Observable, of } from 'rxjs';
+import { Component, computed, inject, OnInit, signal } from '@angular/core';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { catchError, finalize, of } from 'rxjs';
+import { ArticleCardComponent } from '@shared/components/article-card/article-card.component';
 import { TuiAvatar, TuiAvatarOutline, TuiTabs } from '@taiga-ui/kit';
-import { TuiButton, tuiDialog, TuiIcon } from '@taiga-ui/core';
-import { SkeletonComponent } from "@shared/ui/skeleton.component";
-import { ArticleMiniCardComponent } from "./article-mini-card/article-mini-card.component";
+import { TuiButton, TuiIcon } from '@taiga-ui/core';
+import { SkeletonComponent } from '@shared/ui/skeleton.component';
 import { AuthService } from '@core/services/auth.service';
 import { ArticleService } from '@core/services/article.service';
 
@@ -21,24 +21,29 @@ type ProfileTab = 'posts' | 'followers' | 'following';
     TuiIcon,
     TuiTabs,
     SkeletonComponent,
-    ArticleMiniCardComponent
+    ArticleCardComponent,
   ]
 })
 export class ProfileOverviewComponent implements OnInit {
+  private readonly router = inject(Router);
   private readonly auth = inject(AuthService);
   private readonly route = inject(ActivatedRoute);
   private readonly article = inject(ArticleService);
-  private readonly injector = inject(INJECTOR);
 
   private isOwnProfileId = this.route.snapshot.paramMap.get('id');
   protected isAuthUser = this.auth.currentUser;
   protected userProfile = this.auth.userProfile;
+  protected actionLoadingId = this.article.actionLoadingId;
   protected isMyProfile = signal(this.isOwnProfileId !== this.isAuthUser()?.id);
   protected isLoading = signal(true);
   protected userArticles = this.article.userArticles;
   protected activeTab = signal<ProfileTab>('posts');
   protected isFollowing = signal(false);
   protected activeItemIndex = signal(0);
+
+  protected readonly filteredArticles = computed(() => {
+    return this.userArticles().filter((a) => a.status === 'published');
+  });
 
   // --- MOCK DATA --- //
   protected socialLinks = [
@@ -59,13 +64,13 @@ export class ProfileOverviewComponent implements OnInit {
   // --------------------------
 
   ngOnInit(): void {
-    if(this.isOwnProfileId) {
+    if (this.isOwnProfileId) {
       this.getArticles(this.isOwnProfileId);
       this.auth.getUserProfile(this.isOwnProfileId);
     } else {
       this.getArticles(this.isAuthUser()!.id);
       this.auth.getUserProfile(this.isAuthUser()!.id);
-    }
+    };
   };
 
   getArticles(userId: string) {
@@ -77,19 +82,13 @@ export class ProfileOverviewComponent implements OnInit {
       ).subscribe();
   };
 
-  protected async openArticleDialog(): Promise<void> {
-    const dialog = await this.lazyLoad();
-    dialog().subscribe();
+  protected editArticle(id: string) {
+    this.router.navigate(['/editor', id, 'edit']);
   };
 
-  private async lazyLoad(): Promise<(data: void) => Observable<void>> {
-    const { ArticleControlComponent } = await import('./article-control/article-control.component');
-
-    return tuiDialog(ArticleControlComponent, {
-      injector: this.injector,
-      dismissible: true,
-      label: 'Maqolalarni boshqarish'
-    });
+  protected unpublishArticle(id: string) {
+    this.article.unpublishArticle(id)
+      .subscribe();
   };
 
   protected toggleFollow() {
@@ -105,7 +104,7 @@ export class ProfileOverviewComponent implements OnInit {
       this.followers.update(users => users.map(u => u.id === id ? { ...u, isFollowing: !u.isFollowing } : u));
     } else {
       this.following.update(users => users.map(u => u.id === id ? { ...u, isFollowing: !u.isFollowing } : u));
-    }
+    };
   };
 
   protected removeFollower(id: number) {

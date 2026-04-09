@@ -6,7 +6,7 @@ import type { Article } from '@core/models/article.model';
 
 @Component({
   selector: 'app-article',
-  templateUrl: './article.component.html',
+  templateUrl: './article-detail.component.html',
   imports: [
     RouterLink,
     TuiButton,

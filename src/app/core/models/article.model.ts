@@ -15,4 +15,9 @@ export interface Article {
   created_at: string;
   updated_at: string;
   tags: string[];
+  author: {
+    username: string;
+    full_name: string;
+    avatar_url: string;
+  };
 }

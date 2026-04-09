@@ -4,6 +4,7 @@ import type { Article } from '../models/article.model';
 import { AuthService } from './auth.service';
 import { firstValueFrom, map, tap } from 'rxjs';
 import { Supabase } from '@core/config/supabase';
+import { User } from '@supabase/supabase-js';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,18 @@ export class EditorService {
   private auth = inject(AuthService);
   private supabase = inject(Supabase);
 
+  user = this.auth.currentUser();
+
   private _myArticles = signal<Article[]>([]);
   myArticles = this._myArticles.asReadonly();
 
   // Get my articles
   getMyArticles() {
-    return this.http.get<Article[]>(`articles?author_id=eq.${this.auth.currentUser()?.id}`)
-      .pipe(
+    if (!this.user) throw new Error('User not found');
+
+    return this.http.get<Article[]>(
+      `articles?author_id=eq.${this.user.id}&select=*,author:profiles(username,full_name,avatar_url)`
+    ).pipe(
         tap((articles) => this._myArticles.set(articles))
       );
   }
@@ -34,14 +40,11 @@ export class EditorService {
 
   // Create article draft
   async createDraft(title: string, content: any): Promise<Article> {
-    const user = this.auth.currentUser();
-    if (!user) throw new Error('User not found');
-    
     return await firstValueFrom(
       this.http.post<Article[]>('articles', {
         title,
         content,
-        author_id: user.id,
+        author_id: this.user?.id,
         status: 'draft'
       }).pipe(
         map((articles) => articles[0])
@@ -51,9 +54,6 @@ export class EditorService {
 
   // Update article draft
   async updateArticle(id: string, title: string, content: any) {
-    const user = this.auth.currentUser();
-    if (!user) throw new Error('User not found');
-    
     return await firstValueFrom(
       this.http.patch<Article[]>(`articles?id=eq.${id}`, {
         title,

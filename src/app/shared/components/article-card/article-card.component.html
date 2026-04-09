@@ -1,0 +1,143 @@
+<div class="group relative flex flex-col gap-3 p-5 bg-app-card rounded-xl border shadow-xs border-app-border hover:border-green-400/50 transition-all duration-200">
+  <a [routerLink]="['/article', article().id]" class="absolute inset-0 z-10 rounded-xl cursor-pointer">
+    <span class="sr-only">{{ article().title }}</span>
+  </a>
+
+  <div class="flex items-center gap-x-3 text-xs w-full relative z-20">
+    <time [attr.datetime]="article().created_at" class="text-app-text-secondary font-medium">
+      {{ article().created_at | date:'mediumDate' }}
+    </time>
+    <span class="w-1 h-1 bg-app-border rounded-full"></span>
+    <span class="text-app-text-secondary font-medium flex items-center gap-1 opacity-80">
+      <tui-icon icon="@tui.clock" [style.height.rem]="0.75" />
+      {{ article().reading_time }} min
+    </span>
+
+    <div class="ml-auto flex items-center gap-2">
+      @if (!article().published_at) {
+      <tui-chip size="xs" appearance="neutral">Qoralama</tui-chip>
+      } @else if (article().tags.length > 0) {
+      <tui-chip size="xs" appearance="secondary">{{ article().tags[0] }}</tui-chip>
+      } @else {
+      <tui-chip size="xs" appearance="secondary">Umumiy</tui-chip>
+      }
+
+      <button
+        type="button"
+        tuiButton
+        size="xs"
+        appearance="flat-grayscale"
+        class="opacity-75"
+        (click)="$event.stopPropagation()"
+        [tuiDropdown]="content"
+        [(tuiDropdownOpen)]="dropdownOpen"
+      >
+        <tui-icon icon="@tui.ellipsis" [style.height.rem]="0.875" />
+      </button>
+    </div>
+  </div>
+
+  <div>
+    <h3 class="text-base font-bold leading-snug text-app-text-primary group-hover:text-green-400 transition-colors duration-200 line-clamp-2 m-0">
+      {{ article().title }}
+    </h3>
+    <p class="mt-2 text-sm leading-relaxed text-app-text-secondary line-clamp-2">
+      {{ article().content }}
+    </p>
+  </div>
+
+  <div class="flex items-center gap-x-1.5 mt-2">
+    <img
+      [src]="article().author.avatar_url || 'https://ui-avatars.com/api/?name=' + article().author.full_name"
+      alt=""
+      class="h-6 w-6 rounded-full bg-app-bg-alt border border-app-border object-cover"
+    />
+    <p class="text-xs font-medium text-app-text-primary">
+      {{ article().author.full_name }}
+    </p>
+  </div>
+</div>
+
+<ng-template #content>
+  <tui-data-list size="s">
+    <tui-opt-group>
+      <button
+        tuiOption
+        new
+        [disabled]="loadingId() === article().id"
+        type="button"
+        class="gap-1! text-app-text-secondary! hover:text-app-text-primary! transition-colors! pr-2.5!"
+      >
+        <tui-icon class="opacity-75" icon="@tui.link" [style.height.rem]="1" />
+        Havola olish
+      </button>
+    </tui-opt-group>
+
+    @if (isMyArticle() && showActions()) {
+      <tui-opt-group>
+        <button
+          tuiOption
+          new
+          type="button"
+          [disabled]="loadingId() === article().id"
+          (click)="editArticle.emit(article().id)"
+          class="gap-1! text-app-text-secondary! hover:text-app-text-primary! transition-colors! pr-2.5!"
+        >
+          <tui-icon class="opacity-75" icon="@tui.edit" [style.height.rem]="1" />
+          Tahrirlash
+        </button>
+
+        @if (article().status === 'draft' && showActions()) {
+          <button
+            tuiOption
+            new
+            type="button"
+            [disabled]="loadingId() === article().id"
+            (click)="publishArticle.emit(article().id)"
+            class="gap-1! text-app-text-secondary! hover:text-app-text-primary! transition-colors! pr-2.5!"
+          >
+            <tui-icon class="opacity-75" icon="@tui.printer" [style.height.rem]="1" />
+            Nashr qilish
+          </button>
+        }
+
+        @if (article().status === 'published' && showActions()) {
+          <button
+            tuiOption
+            new
+            type="button"
+            [disabled]="loadingId() === article().id"
+            (click)="unpublishArticle.emit(article().id)"
+            class="gap-1! text-app-text-secondary! hover:text-app-text-primary! transition-colors! pr-2.5!"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-printer-x-icon lucide-printer-x">
+              <path d="M12.531 22H7a1 1 0 0 1-1-1v-6a1 1 0 0 1 1-1h6.377"/>
+              <path d="m16.5 16.5 5 5"/>
+              <path d="m16.5 21.5 5-5"/>
+              <path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v1.5"/>
+              <path d="M6 9V3a1 1 0 0 1 1-1h10a1 1 0 0 1 1 1v6"/>
+            </svg>
+            Nashrdan qaytarish
+          </button>
+        }
+      </tui-opt-group>
+
+      @if(isMyArticle() && article().status !== 'published' && showActions()) {
+      <tui-opt-group>
+        <button
+          tuiOption
+          new
+          tuiAppearance="negative"
+          type="button"
+          [disabled]="loadingId() === article().id"
+          (click)="deleteArticle.emit(article().id)"
+          class="gap-1! text-red-500! pr-2.5!"
+        >
+          <tui-icon class="opacity-75" icon="@tui.trash" [style.height.rem]="1" />
+          O'chirish
+        </button>
+      </tui-opt-group>
+      }
+    }
+  </tui-data-list>
+</ng-template>
