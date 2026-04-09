@@ -1,43 +1,23 @@
 <div class="py-8 md:py-12">
   <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-8">
     @for (article of articles(); track article.id) {
-      <article class="group flex flex-col items-start justify-between p-5 bg-app-card rounded-2xl border shadow-xs border-app-border hover:border-green-400/50 transition-colors duration-200 cursor-pointer" [routerLink]="['/article', article.id]">
-        <div class="flex items-center gap-x-3 text-xs mb-3 w-full">
-          <time [attr.datetime]="article.created_at" class="text-app-text-secondary font-medium">
-            {{ article.created_at | date:'mediumDate' }}
-          </time>
-          <span class="w-1 h-1 bg-app-border rounded-full"></span>
-          <span class="text-app-text-secondary font-medium flex items-center opacity-80">
-            <tui-icon icon="@tui.clock" [style.height.rem]="0.75" />
-            {{ article.reading_time }} min
-          </span>
-          <span class="ml-auto text-[11px] px-2 py-1 rounded-md bg-app-bg-alt text-app-text-primary border border-app-border">
-            {{ article.tags[0] }}
-          </span>
-        </div>
-
-        <div class="w-full">
-          <h3 class="text-lg font-bold leading-tight text-app-text-primary group-hover:text-green-400 transition-colors duration-200 line-clamp-2">
-            {{ article.title }}
-          </h3>
-          <p class="mt-2 text-sm leading-relaxed text-app-text-secondary line-clamp-2">
-            {{ 'article.content' }}
-          </p>
-        </div>
-
-        <div class="mt-5 flex items-center gap-x-3">
-          <img [src]="article.cover_image" alt="" class="h-8 w-8 rounded-full bg-app-bg-alt border border-app-border object-cover">
-          <div class="text-sm">
-            <p class="font-medium text-app-text-primary">
-              {{ article.author_id }}
-            </p>
-          </div>
-        </div>
-      </article>
+      <app-article-card
+        [article]="article"
+        [showActions]="false"
+      />
     } @empty {
-      <div class="col-span-full py-16 text-center border border-dashed border-app-border rounded-2xl">
-        <p class="text-app-text-secondary text-base">Hozircha maqolalar yo'q.</p>
-      </div>
+      @if (isLoading()) {
+        <app-skeleton [skeleton]="isLoading()" [count]="45" />
+        <app-skeleton [skeleton]="isLoading()" [count]="45" />
+        <app-skeleton [skeleton]="isLoading()" [count]="45" />
+        <app-skeleton [skeleton]="isLoading()" [count]="45" />
+        <app-skeleton [skeleton]="isLoading()" [count]="45" />
+        <app-skeleton [skeleton]="isLoading()" [count]="45" />
+      } @else {
+        <div class="col-span-full py-16 text-center border border-dashed border-app-border rounded-2xl">
+          <p class="text-app-text-secondary text-base">Hozircha maqolalar yo'q.</p>
+        </div>
+      }
     }
   </div>
 </div>
