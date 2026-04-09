@@ -24,6 +24,7 @@ export class ArticleCardComponent {
 
   article = input.required<Article>();
   loadingId = input<string | null>(null);
+  showActions = input<boolean>(true);
   editArticle = output<string>();
   publishArticle = output<string>();
   unpublishArticle = output<string>();

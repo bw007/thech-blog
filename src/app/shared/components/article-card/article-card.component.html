@@ -73,7 +73,7 @@
       </button>
     </tui-opt-group>
 
-    @if (isMyArticle()) {
+    @if (isMyArticle() && showActions()) {
       <tui-opt-group>
         <button
           tuiOption
@@ -87,7 +87,7 @@
           Tahrirlash
         </button>
 
-        @if (article().status === 'draft') {
+        @if (article().status === 'draft' && showActions()) {
           <button
             tuiOption
             new
@@ -101,7 +101,7 @@
           </button>
         }
 
-        @if (article().status === 'published') {
+        @if (article().status === 'published' && showActions()) {
           <button
             tuiOption
             new
@@ -122,7 +122,7 @@
         }
       </tui-opt-group>
 
-      @if(isMyArticle() && article().status !== 'published') {
+      @if(isMyArticle() && article().status !== 'published' && showActions()) {
       <tui-opt-group>
         <button
           tuiOption
