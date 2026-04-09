@@ -1,20 +1,27 @@
-import { Component, inject } from '@angular/core';
-import { DatePipe } from '@angular/common';
-import { RouterLink } from '@angular/router';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { finalize } from 'rxjs';
+import { ArticleCardComponent } from "@shared/components/article-card/article-card.component";
+import { SkeletonComponent } from "@shared/ui/skeleton.component";
 import { ArticleService } from '@core/services/article.service';
-import { TuiIcon } from "@taiga-ui/core";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   imports: [
-    RouterLink,
-    DatePipe,
-    TuiIcon
+    ArticleCardComponent,
+    SkeletonComponent
   ],
 })
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   private article = inject(ArticleService);
 
-  articles = this.article.latestArticles;
+  articles = this.article.publishedArticles;
+  protected isLoading = signal<boolean>(false);
+
+  ngOnInit(): void {
+    this.isLoading.set(true);
+    this.article.getPublishedArticles().pipe(
+      finalize(() => this.isLoading.set(false))
+    ).subscribe();
+  }
 }
