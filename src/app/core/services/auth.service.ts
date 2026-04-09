@@ -1,12 +1,12 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { Router } from '@angular/router';
-import { TuiAlertService } from '@taiga-ui/core';
 import { Supabase } from '@core/config/supabase';
 import type { AuthProvider } from '@core/models/auth.model';
 import type { AuthError, User } from '@supabase/supabase-js';
 import { authErrors } from '@core/constants/error.constants';
 import { storage } from '@core/constants/storage.constants';
 import { routes } from '@core/constants/routes.constants';
+import { AlertService } from './alert.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ import { routes } from '@core/constants/routes.constants';
 export class AuthService {
   private supabase = inject(Supabase);
   private router = inject(Router);
-  private readonly alerts = inject(TuiAlertService);
+  private alert = inject(AlertService);
 
   private _currentUser = signal<User | null>(null);
   private _userProfile = signal<any>(null);
@@ -97,7 +97,7 @@ export class AuthService {
       .eq('id', userId)
       .single();
     if (error) {
-      this.showNotification(error.message, 'negative');
+      this.alert.showNotification(error.message, 'negative');
       return;
     }
     
@@ -124,7 +124,7 @@ export class AuthService {
     this.setLoadingProvider(null);
 
     if (error) {
-      this.showNotification(this.getErrorMessage(error), 'negative',);
+      this.alert.showNotification(this.getErrorMessage(error), 'negative');
       return;
     };
     
@@ -144,7 +144,7 @@ export class AuthService {
     this.setLoadingProvider(null);
 
     if (error) {
-      this.showNotification(this.getErrorMessage(error), 'negative');
+      this.alert.showNotification(this.getErrorMessage(error), 'negative');
       return;
     }
 
@@ -162,10 +162,10 @@ export class AuthService {
 
     this.resendOtpLoading.set(false);
     if (error) {
-      this.showNotification(this.getErrorMessage(error), 'negative');
+      this.alert.showNotification(this.getErrorMessage(error), 'negative');
       return;
     }
-    this.showNotification('Kod qayta yuborildi', 'positive');
+    this.alert.showNotification('Kod qayta yuborildi', 'positive');
   }
 
   // SIGN IN WITH EMAIL
@@ -180,7 +180,7 @@ export class AuthService {
     this.setLoadingProvider(null);
     
     if (error) {
-      this.showNotification(this.getErrorMessage(error), 'negative',);
+      this.alert.showNotification(this.getErrorMessage(error), 'negative');
       if (error.code === 'email_not_confirmed') {
         sessionStorage.setItem(storage.PENDING_EMAIL, email);
         this.router.navigate([routes.auth.VERIFY_EMAIL]);
@@ -205,11 +205,11 @@ export class AuthService {
 
     this.setLoadingProvider(null);
     if (error) {
-      this.showNotification(this.getErrorMessage(error), 'negative');
+      this.alert.showNotification(this.getErrorMessage(error), 'negative');
       return;
     }
 
-    this.showNotification('E-pochtani tekshiring', 'positive');
+    this.alert.showNotification('E-pochtani tekshiring', 'positive');
   }
 
   // UPDATE PASSWORD
@@ -224,12 +224,12 @@ export class AuthService {
     this.setLoadingProvider(null);
 
     if (error) {
-      this.showNotification(this.getErrorMessage(error), 'negative');
+      this.alert.showNotification(this.getErrorMessage(error), 'negative');
       return;
     }
 
     await this.supabase.client.auth.signOut();
-    this.showNotification('Parol yangilandi, qayta kiring', 'positive');
+    this.alert.showNotification('Parol yangilandi, qayta kiring', 'positive');
     this.router.navigate([routes.auth.SIGN_IN]);
   }
 
@@ -247,7 +247,7 @@ export class AuthService {
     
     if (error) {  
       this.setLoadingProvider(null);
-      this.showNotification(this.getErrorMessage(error), 'negative');
+      this.alert.showNotification(this.getErrorMessage(error), 'negative');
       return;
     };
   };
@@ -261,7 +261,7 @@ export class AuthService {
     this.setLoadingProvider(null);
     
     if (error) {
-      this.showNotification(this.getErrorMessage(error), 'negative');
+      this.alert.showNotification(this.getErrorMessage(error), 'negative');
       return;
     };
     
@@ -296,16 +296,6 @@ export class AuthService {
   }
 
   // ERRORS
-  private showNotification(content: string, appearance: string): void {
-    this.alerts
-      .open(content, {
-        appearance,
-        autoClose: 3000,
-        closeable: true
-      })
-      .subscribe();
-  };
-
   private getErrorMessage(error: AuthError): string {
     return (error.code && authErrors[error.code]) ?? 'Xatolik yuz berdi';
   }
