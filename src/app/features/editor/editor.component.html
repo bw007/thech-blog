@@ -48,14 +48,30 @@
           <tui-icon icon="@tui.command" [style.height.rem]="1" />
         </button>
 
-        <button
-          tuiButton
-          appearance="primary"
-          size="s"
-          class="bg-green-500! hover:bg-green-600! text-white! border-none! px-4! sm:px-6!"
-        >
-          Chop etish
-        </button>
+        @if (articleStatus() === 'draft') {
+          <button
+            tuiButton
+            appearance="primary"
+            size="s"
+            [loading]="actionLoadingId()"
+            (click)="publishArticle(articleId()!)"
+            [disabled]="!articleId()"
+            class="bg-green-500! hover:bg-green-600! text-white! border-none! px-4! sm:px-6!"
+          >
+            Nashr qilish
+          </button>
+        } @else {
+          <button
+            tuiButton
+            appearance="primary"
+            size="s"
+            [loading]="actionLoadingId()"
+            (click)="unpublishArticle(articleId()!)"
+            class="bg-red-500! hover:bg-red-600! text-white! border-none! px-4! sm:px-6!"
+          >
+            Nashrdan qaytarish
+          </button>
+        }
       </div>
     </div>
   </header>

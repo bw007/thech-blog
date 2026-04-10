@@ -3,7 +3,7 @@ import { RouterLink } from "@angular/router";
 import { DomSanitizer } from "@angular/platform-browser";
 import { DatePipe } from "@angular/common";
 import { TuiIcon, TuiDataList, TuiDropdown, TuiButton } from "@taiga-ui/core";
-import { TuiChip } from "@taiga-ui/kit";
+import { TuiChip, TuiAvatar } from "@taiga-ui/kit";
 import type { Article } from "@core/models/article.model";
 import { AuthService } from "@core/services/auth.service";
 import { generateHTML } from "@tiptap/core";
@@ -21,7 +21,8 @@ import { Figcaption, Figure } from "@features/editor/extensions/figure.extension
     TuiDataList,
     TuiDropdown,
     TuiChip,
-    TuiButton
+    TuiButton,
+    TuiAvatar
   ],
 })
 export class ArticleCardComponent {

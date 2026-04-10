@@ -1,4 +1,4 @@
-<div class="group relative flex flex-col gap-3 p-5 bg-app-card rounded-xl border shadow-xs border-app-border hover:border-green-400/50 transition-all duration-200">
+<div class="group relative flex flex-col gap-2 p-5 bg-app-card rounded-xl border shadow-xs border-app-border hover:border-green-400/50 transition-all duration-200">
   <a [routerLink]="['/article', article().id]" class="absolute inset-0 z-10 rounded-xl cursor-pointer">
     <span class="sr-only">{{ article().title }}</span>
   </a>
@@ -8,7 +8,7 @@
       {{ article().created_at | date:'mediumDate' }}
     </time>
     <span class="w-1 h-1 bg-app-border rounded-full"></span>
-    <span class="text-app-text-secondary font-medium flex items-center gap-1 opacity-80">
+    <span class="text-app-text-secondary font-medium flex items-center opacity-80">
       <tui-icon icon="@tui.clock" [style.height.rem]="0.75" />
       {{ article().reading_time }} min
     </span>
@@ -42,20 +42,30 @@
       {{ article().title }}
     </h3>
     <p
-      class="mt-2 min-h-10 text-sm leading-snug text-app-text-secondary line-clamp-2"
+      class="mt-2 h-10 text-sm leading-snug text-app-text-secondary line-clamp-2"
       [innerHTML]="getArticleContent(article().content)"
     ></p>
   </div>
 
-  <div class="flex items-center gap-x-1.5 mt-1">
-    <img
-      [src]="article().author.avatar_url || 'https://ui-avatars.com/api/?name=' + article().author.full_name"
-      alt=""
-      class="h-6 w-6 rounded-full bg-app-bg-alt border border-app-border object-cover"
-    />
-    <p class="text-xs font-medium text-app-text-primary">
+  <div class="flex items-center justify-between gap-x-1.5 mt-1 z-20">
+    <a [routerLink]="['/profile', article().author.username]" class="flex items-center gap-x-1.5 text-app-text-secondary! hover:underline hover:text-app-text-primary! transition-colors! duration-200">
+      <tui-avatar [src]="article().author.avatar_url" size="xs" />
       {{ article().author.full_name }}
-    </p>
+    </a>
+    <div class="flex items-center gap-x-2">
+      <span class="text-app-text-secondary font-normal! flex items-center opacity-80">
+        <tui-icon icon="@tui.eye" [style.height.rem]="0.9" />
+        {{ article().views_count }}
+      </span>
+      <span class="text-app-text-secondary font-normal! flex items-center opacity-80">
+        <tui-icon icon="@tui.heart" [style.height.rem]="0.9" />
+        {{ article().likes_count }}
+      </span>
+      <span class="text-app-text-secondary font-normal! flex items-center opacity-80">
+        <tui-icon icon="@tui.message-circle" [style.height.rem]="0.85" />
+        {{ article().likes_count }}
+      </span>
+    </div>
   </div>
 </div>
 
