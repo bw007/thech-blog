@@ -38,15 +38,16 @@
   </div>
 
   <div>
-    <h3 class="text-base font-bold leading-snug text-app-text-primary group-hover:text-green-400 transition-colors duration-200 line-clamp-2 m-0">
+    <h3 class="text-xl lg:text-2xl font-bold leading-snug text-app-text-primary group-hover:text-green-400 transition-colors duration-200 line-clamp-1 m-0">
       {{ article().title }}
     </h3>
-    <p class="mt-2 text-sm leading-relaxed text-app-text-secondary line-clamp-2">
-      {{ article().content }}
-    </p>
+    <p
+      class="mt-2 min-h-10 text-sm leading-snug text-app-text-secondary line-clamp-2"
+      [innerHTML]="getArticleContent(article().content)"
+    ></p>
   </div>
 
-  <div class="flex items-center gap-x-1.5 mt-2">
+  <div class="flex items-center gap-x-1.5 mt-1">
     <img
       [src]="article().author.avatar_url || 'https://ui-avatars.com/api/?name=' + article().author.full_name"
       alt=""

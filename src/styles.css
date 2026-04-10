@@ -56,20 +56,22 @@
 
 @keyframes slideDown {
   from { 
-    opacity: 0; 
-    transform: translateY(-16px); 
+    opacity: 0;
+    transform: translateY(-16px);
   }
   to { 
-    opacity: 1; 
-    transform: translateY(0); 
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
-.ProseMirror p {
+.ProseMirror p,
+.article-content p {
   margin: 0.5rem 0;
 }
 
-.ProseMirror p.is-editor-empty:first-child::before {
+.ProseMirror p.is-editor-empty:first-child::before,
+.article-content p.is-editor-empty:first-child::before {
   content: attr(data-placeholder);
   color: var(--color-app-text-muted);
   pointer-events: none;
@@ -77,18 +79,21 @@
   height: 0;
 }
 
-.ProseMirror img {
+.ProseMirror img,
+.article-content img {
   width: 100%;
   height: auto;
   margin: 2rem 0;
 }
 
-.ProseMirror img.ProseMirror-selectednode {
+.ProseMirror img.ProseMirror-selectednode,
+.article-content img.ProseMirror-selectednode {
   outline: 2px solid var(--color-green-400);
   cursor: pointer;
 }
 
-.ProseMirror h1 {
+.ProseMirror h1,
+.article-content h1 {
   font-size: 2rem;
   font-weight: 700;
   margin-top: 2rem;
@@ -96,7 +101,8 @@
   line-height: 1.2;
 }
 
-.ProseMirror h2 {
+.ProseMirror h2,
+.article-content h2 {
   font-size: 1.5rem;
   font-weight: 600;
   margin-top: 1.5rem;
@@ -105,38 +111,47 @@
 }
 
 .ProseMirror ul,
-.ProseMirror ol {
+.article-content ul,
+.ProseMirror ol,
+.article-content ol {
   padding-left: 2rem;
 }
 
-.ProseMirror ul {
+.ProseMirror ul,
+.article-content ul {
   list-style: disc;
 }
 
-.ProseMirror ol {
+.ProseMirror ol,
+.article-content ol {
   list-style: decimal;
 }
 
-.ProseMirror li {
+.ProseMirror li,
+.article-content li {
   position: relative;
 }
 
-.ProseMirror li::marker {
+.ProseMirror li::marker,
+.article-content li::marker {
   color: var(--app-text-secondary);
 }
 
-.ProseMirror a {
+.ProseMirror a,
+.article-content a {
   color: var(--app-text-primary);
   text-decoration: underline;
   text-underline-offset: 0.25rem;
   cursor: pointer;
 }
 
-.ProseMirror a:hover {
+.ProseMirror a:hover,
+.article-content a:hover {
   color: var(--app-text-secondary);
 }
 
-.ProseMirror blockquote {
+.ProseMirror blockquote,
+.article-content blockquote {
   border-left: 4px solid var(--app-text-muted);
   background-color: var(--app-bg-alt);
   padding: 0.5rem 1.2rem;
@@ -147,7 +162,8 @@
   border-radius: 0 0.5rem 0.5rem 0;
 }
 
-.ProseMirror hr {
+.ProseMirror hr,
+.article-content hr {
   border: none;
   height: 1.5rem;
   margin: 2rem auto;
@@ -155,22 +171,26 @@
   overflow: visible;
 }
 
-.ProseMirror hr::after {
+.ProseMirror hr::after,
+.article-content hr::after {
   content: '···';
   color: var(--app-text-muted);
   font-size: 1.75rem;
   letter-spacing: 1rem;
 }
 
-.ProseMirror figure {
+.ProseMirror figure,
+.article-content figure {
   margin: 1.2rem 0;
 }
 
-.ProseMirror figure img {
+.ProseMirror figure img,
+.article-content figure img {
   margin-bottom: 0;
 }
 
-.ProseMirror figcaption {
+.ProseMirror figcaption,
+.article-content figcaption {
   text-align: center;
   font-size: 0.875rem;
   color: var(--app-text-secondary);
@@ -178,7 +198,8 @@
   outline: none;
 }
 
-.ProseMirror figcaption.is-empty::before {
+.ProseMirror figcaption.is-empty::before,
+.article-content figcaption.is-empty::before {
   content: attr(data-placeholder);
   color: var(--app-text-muted);
   opacity: 0.5;

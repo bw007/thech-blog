@@ -57,7 +57,8 @@ export class EditorService {
     return await firstValueFrom(
       this.http.patch<Article[]>(`articles?id=eq.${id}`, {
         title,
-        content
+        content,
+        reading_time: this.calculateReadingTime(content)
       }).pipe(
         map((articles) => articles[0])
       )
@@ -87,4 +88,21 @@ export class EditorService {
       return urlData.publicUrl;
   };
 
+  // Get text from JSON content
+  private getTextFromJson(content: Record<string, any>): string {
+    let text = '';
+    function extract(node: any) {
+      if (node.type === 'text') text += node.text + ' ';
+      if (node.content) node.content.forEach(extract);
+    }
+    extract(content);
+    return text;
+  }
+
+  // Calculate reading time
+  private calculateReadingTime(content: Record<string, any>): number {
+    const text = this.getTextFromJson(content);
+    const words = text.trim().split(/\s+/).length;
+    return Math.max(1, Math.ceil(words / 250));
+  }
 }
