@@ -2,7 +2,7 @@ import { AfterViewInit, Component, DestroyRef, ElementRef, inject, OnDestroy, si
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { debounceTime, Subject } from 'rxjs';
+import { debounceTime, Subject, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { TuiButton, TuiHint, TuiIcon, TuiTextfield } from '@taiga-ui/core';
@@ -18,6 +18,9 @@ import { NoMultipleSpaces } from './extensions/no-multiple-spaces.extension';
 import { ThemeService } from '@core/services/theme.service';
 import { EditorService } from '@core/services/editor.service';
 import { Article } from '@core/models/article.model';
+import { ArticleService } from '@core/services/article.service';
+import { AlertService } from '@core/services/alert.service';
+import { TuiButtonLoading } from '@taiga-ui/kit';
 
 @Component({
   selector: 'app-editor',
@@ -26,6 +29,7 @@ import { Article } from '@core/models/article.model';
     FormsModule,
     RouterLink,
     TuiTextfield,
+    TuiButtonLoading,
     TuiButton,
     TuiIcon,
     TuiHint,
@@ -40,6 +44,8 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   private location = inject(Location);
   private theme = inject(ThemeService);
   private editorService = inject(EditorService);
+  private articleService = inject(ArticleService);
+  private alert = inject(AlertService);
 
   private titleInput = viewChild<ElementRef<HTMLTextAreaElement>>('titleInput');
   private readonly linkInput = viewChild<ElementRef<HTMLInputElement>>('linkInput');
@@ -50,6 +56,8 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
   protected title = signal('');
   protected link = signal('');
   protected isLink = signal(false);
+  protected articleStatus = signal<'draft' | 'published' | 'scheduled'>('draft');
+  protected actionLoadingId = this.articleService.actionLoadingId;
 
   protected readonly imageUploading = signal(false);
   protected readonly saving = signal(false);
@@ -112,6 +120,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     const article = this.route.snapshot.data['article'] as Article | null;
     if (article) {
       this.articleId.set(article.id);
+      this.articleStatus.set(article.status);
       this.title.set(article.title);
     };
 
@@ -154,6 +163,7 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
     if (article) {
       // this.router.navigate(['/editor', article.id, 'edit'], { replaceUrl: true });
       this.location.replaceState(`/editor/${article.id}/edit`);
+      this.articleStatus.set(article.status);
       this.articleId.set(article.id);
     }
     this.saving.set(false);
@@ -168,7 +178,27 @@ export class EditorComponent implements AfterViewInit, OnDestroy {
       this.editor.getJSON()
     );
     this.saving.set(false);
-  }
+  };
+
+  publishArticle(id: string) {
+    if (!id) return;
+    this.articleService.publishArticle(id).pipe(
+      tap(() => {
+        this.alert.showNotification('Maqola nashr qilindi', 'success');
+        this.articleStatus.set('published');
+      })
+    ).subscribe();
+  };
+
+  unpublishArticle(id: string) {
+    if (!id) return;
+    this.articleService.unpublishArticle(id).pipe(
+      tap(() => {
+        this.alert.showNotification('Maqola nashrdan qaytarildi', 'success');
+        this.articleStatus.set('draft');
+      })
+    ).subscribe();
+  };
 
   // Image methods
   async insertImage(file: File) {
