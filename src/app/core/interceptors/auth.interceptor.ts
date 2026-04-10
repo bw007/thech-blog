@@ -14,19 +14,18 @@ export const authInterceptor: HttpInterceptorFn = (
   return from(session).pipe(
     switchMap(data => {
       const accessToken = data?.access_token;
-      
-      if (accessToken) {
-        const reqClone = req.clone({
-          setHeaders: {
-            'apiKey': environment.supabase.api_key,
-            'Authorization': `Bearer ${accessToken}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=representation'
-          }
-        });
-        return next(reqClone);
+      const headers: Record<string, string> = {
+        'apiKey': environment.supabase.api_key,
+        'Content-Type': 'application/json',
+        'Prefer': 'return=representation'
       }
-      return next(req);
+
+      if (accessToken) {
+        headers['Authorization'] = `Bearer ${accessToken}`;
+      }
+
+      const reqClone = req.clone({ setHeaders: headers });
+      return next(reqClone);
     })
   )
 }
