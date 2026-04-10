@@ -41,7 +41,21 @@
             {{ article!.reading_time }} min
           </span>
 
-          <div class="ml-auto flex items-center gap-2">
+          <div class="ml-auto flex items-center gap-4">
+            <span class="text-app-text-secondary font-medium flex items-center opacity-80">
+              <tui-icon icon="@tui.eye" [style.height.rem]="0.9" />
+              {{ article!.views_count }}
+            </span>
+            
+            <button
+              tuiButton
+              size="xs"
+              appearance="flat"
+              class="text-app-text-secondary! hover:text-red-500! font-medium flex items-center opacity-80 rounded-full! px-2!"
+            >
+              <tui-icon icon="@tui.heart" [style.height.rem]="0.9" />
+              {{ article!.likes_count }}
+            </button>
             @if (!article!.published_at) {
               <tui-chip size="xs" appearance="neutral">Qoralama</tui-chip>
             } @else if (article!.tags.length > 0) {
@@ -62,6 +76,21 @@
       }
 
       <div [innerHTML]="articleContent" class="article-content text-app-text-primary leading-relaxed text-sm md:text-base xl:text-lg max-w-none"></div>
+      <div class="">
+        <div class="border-t border-app-border mt-10 mb-4"></div>
+        <div class="flex items-center gap-x-5 px-4">
+          <span class="text-app-text-secondary font-normal! flex items-center opacity-80">
+            <tui-icon icon="@tui.message-circle" [style.height.rem]="0.85" />
+            {{ article!.likes_count }}
+          </span>
+          @if (article!.tags.length > 0) {
+            <span class="text-app-text-secondary font-normal! flex items-center opacity-80">
+              <tui-icon icon="@tui.tag" [style.height.rem]="0.85" />
+              {{ article!.tags.join(', ') }}
+            </span>
+          }
+        </div>
+      </div>
     </article>
   } @else {
     <div class="py-20 text-center">
