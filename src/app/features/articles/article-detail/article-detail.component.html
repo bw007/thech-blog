@@ -1,10 +1,10 @@
 <div class="py-8 md:py-12 animate-fade-in max-w-4xl mx-auto px-4 md:px-0">
-  @if (article) {
+  @if (article && articleContent) {
     <article>
       <button
         tuiButton
         size="xs"
-        routerLink="/"
+        (click)="back()"
         appearance="flat"
         class="inline-flex items-center gap-2 text-sm text-app-text-primary! hover:text-green-400 transition-colors mb-2 no-underline font-medium"
       >
@@ -16,35 +16,43 @@
         <h1 class="text-3xl md:text-5xl font-bold tracking-tight text-app-text-primary mb-6 leading-tight">
           {{ article!.title }}
         </h1>
-
-        <div class="flex flex-wrap items-center gap-4 text-sm w-full pb-6 border-b border-app-border">
-          <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2.5 flex-wrap text-xs mb-5">
+          <div class="flex items-center gap-2">
             <img
               [src]="article!.author.avatar_url || 'https://ui-avatars.com/api/?name=' + article!.author.full_name"
               alt=""
-              class="h-10 w-10 rounded-full bg-app-bg-alt border border-app-border object-cover"
+              class="h-7 w-7 rounded-full bg-app-bg-alt border border-app-border object-cover"
             >
-            <span class="font-medium text-app-text-primary">
+            <span class="text-[13px] font-medium text-app-text-primary">
               {{ article!.author.full_name }}
             </span>
           </div>
 
-          <span class="w-1 h-1 bg-app-border rounded-full hidden sm:block"></span>
-          
-          <time [attr.datetime]="article!.created_at" class="text-app-text-secondary">
-            {{ article!.created_at | date:'mediumDate' }}
+          <span class="text-app-border">·</span>
+
+          <time [attr.datetime]="article!.created_at" class="text-app-text-secondary font-medium">
+            {{ article!.created_at | date:'d MMMM, yyyy' }}
           </time>
 
-          <span class="w-1 h-1 bg-app-border rounded-full hidden sm:block"></span>
-          
-          <span class="text-app-text-secondary">
-            {{ article!.reading_time }}
+          <span class="text-app-border">·</span>
+
+          <span class="flex items-center gap-1 text-app-text-secondary opacity-80">
+            <tui-icon icon="@tui.clock" [style.height.rem]="0.75" />
+            {{ article!.reading_time }} min
           </span>
 
-          <span class="ml-auto text-xs px-2.5 py-1.5 rounded-lg bg-app-bg-alt text-app-text-primary border border-app-border font-medium">
-            {{ article!.status }}
-          </span>
+          <div class="ml-auto flex items-center gap-2">
+            @if (!article!.published_at) {
+              <tui-chip size="xs" appearance="neutral">Qoralama</tui-chip>
+            } @else if (article!.tags.length > 0) {
+              <tui-chip size="xs" appearance="secondary">{{ article!.tags[0] }}</tui-chip>
+            } @else {
+              <tui-chip size="xs" appearance="secondary">Umumiy</tui-chip>
+            }
+          </div>
         </div>
+
+        <div class="border-b border-app-border"></div>
       </header>
 
       @if (article!.cover_image) {
@@ -53,9 +61,7 @@
         </div>
       }
 
-      <div class="text-app-text-primary leading-relaxed md:text-lg prose-base max-w-none">
-        {{article!.content}}
-      </div>
+      <div [innerHTML]="articleContent" class="article-content text-app-text-primary leading-relaxed text-sm md:text-base xl:text-lg max-w-none"></div>
     </article>
   } @else {
     <div class="py-20 text-center">
