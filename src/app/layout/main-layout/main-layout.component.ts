@@ -1,10 +1,7 @@
-import { Component, inject } from "@angular/core";
+import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { HeaderComponent } from "./header/header.component";
 import { FooterComponnet } from "./footer/footer.component";
-import { ProgressBarComponent } from "@shared/ui/progress-bar.component";
-import { ArticleService } from "@core/services/article.service";
-import { ProgressService } from "@core/services/progress.service";
 
 @Component({
   selector: 'app-main-layout',
@@ -12,12 +9,8 @@ import { ProgressService } from "@core/services/progress.service";
   imports: [
     RouterOutlet,
     HeaderComponent,
-    FooterComponnet,
-    ProgressBarComponent
+    FooterComponnet
   ]
 })
 
-export class MainLayoutComponent {
-  private progressService = inject(ProgressService);
-  private article = inject(ArticleService);
-}
+export class MainLayoutComponent {}
