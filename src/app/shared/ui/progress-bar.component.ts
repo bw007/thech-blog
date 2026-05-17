@@ -10,7 +10,8 @@ import { ProgressService } from "@core/services/progress.service";
     max="100"
     [size]="size()"
     color="var(--color-green-300)"
-    class="bg-transparent!"
+    class="bg-transparent! transition-opacity duration-300 fixed w-full top-0 z-50"
+    [class.opacity-0]="(value | async) === 0"
     tuiProgressBar
     [value]="value | async"
   ></progress>`,
@@ -20,6 +21,5 @@ export class ProgressBarComponent {
   private progressService = inject(ProgressService);
 
   protected value = this.progressService.progressPercentage$;
-  // value = input<Observable<string | number>>();
   size = input<TuiSizeS | TuiSizeXXS | TuiSizeXS>('xxs')
 }
