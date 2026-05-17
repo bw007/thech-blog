@@ -25,7 +25,7 @@ export class ArticleService {
   // Get published articles
   getPublishedArticles() {
     return this.http.get<Article[]>(
-      `articles?status=eq.published&select=*,author:profiles(username,full_name,avatar_url)`
+      `articles?status=eq.published&select=*,author:profiles(username,full_name,avatar_url)`,
     ).pipe(
       tap((articles) => this._publishedArticles.set(articles))
     );
