@@ -7,6 +7,7 @@ import { AuthService } from '@core/services/auth.service';
 import { ThemeService } from '@core/services/theme.service';
 import { filter } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { LogoComponent } from "@shared/ui/logo.component";
 
 @Component({
   selector: 'app-header',
@@ -22,7 +23,8 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
     TuiAvatar,
     TuiAvatarOutline,
     TuiDrawer,
-    TuiPopup
+    TuiPopup,
+    LogoComponent
   ]
 })
 export class HeaderComponent implements OnInit {
@@ -44,6 +46,7 @@ export class HeaderComponent implements OnInit {
       filter(e => e instanceof NavigationEnd),
       takeUntilDestroyed(this.destroyRef)
     ).subscribe(() => {
+      this.open.set(false);
       this.dropdownOpen.set(false);
     });
   }
