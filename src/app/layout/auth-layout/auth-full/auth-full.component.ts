@@ -19,6 +19,7 @@ import { AuthProvider, UserCredentals } from "@core/models/auth.model";
 export class AuthFullComponent implements OnInit {
   private auth = inject(AuthService);
   private router = inject(Router);
+  protected readonly year = new Date().getFullYear();
 
   protected loadingProvider = this.auth.loadingProvider;
 
@@ -30,17 +31,13 @@ export class AuthFullComponent implements OnInit {
     { initialValue: this.router.url.split('?')[0] }
   );
 
-  readonly isSignUp = computed(() => this.currentRoutePath().includes('sign-up'));;
+  readonly isSignUp = computed(() => this.currentRoutePath().includes('sign-up'));
 
   ngOnInit(): void {
     const provider = localStorage.getItem(storage.AUTH_PROVIDER) as AuthProvider;
     if (provider) {
       this.auth.setLoadingProvider(provider);
     }
-  }
-
-  loginWithEmail(credentals: UserCredentals) {
-    this.auth.signInWithEmail(credentals.email, credentals.password);
   }
 
   signInWithOauth(provider: AuthProvider) {
