@@ -39,21 +39,25 @@ export class ArticleCardComponent {
   readonly dropdownOpen = signal(false);
 
   protected readonly articleText = computed(() => {
-    const content = this.article().content;
-
-    const nodes = content['content'];
+    const nodes = this.article().content['content'];
     const firstNodes = Array.isArray(nodes) ? nodes.slice(0, 4) : [];
 
-    return this.extractText({ type: 'doc', content: firstNodes })
+    return firstNodes
+      .map((node: any) => this.extractText(node))
+      .join(' ')
       .replace(/\s+/g, ' ')
       .trim();
   });
 
+  private readonly skipTypes = new Set([
+    'image', 'figure', 'figcaption', 'horizontalRule'
+  ]);
+
   private extractText(node: any): string {
     if (!node) return '';
+    console.log(node)
+    if (this.skipTypes.has(node.type)) return '';
 
-    const skipTypes = ['image', 'figure', 'figcaption', 'horizontalRule'];
-    if (skipTypes.includes(node.type)) return '';
     if (node.type === 'text') return node.text || '';
 
     if (node.content?.length) {
