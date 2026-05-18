@@ -1,11 +1,11 @@
 <div class="flex flex-col items-center">
-  <div class="w-12 h-12 bg-green-50 rounded-xl flex items-center justify-center mb-6">
+  <div class="w-12 h-12 bg-app-bg-alt rounded-xl flex items-center justify-center mb-6">
     <tui-icon icon="@tui.shield-check" class="text-green-400" [style.fontSize.rem]="1.5" />
   </div>
 
-  <h1 class="text-xl font-bold text-gray-900 mb-2">Kodni tasdiqlang</h1>
-  <p class="text-sm text-center text-gray-500 mb-8">
-    <span class="font-medium text-gray-700">{{ email() }}</span> manziliga
+  <h1 class="text-xl font-bold text-app-text-primary mb-2">Kodni tasdiqlang</h1>
+  <p class="text-sm text-center text-app-text-muted mb-8">
+    <span class="font-medium text-app-text-primary">{{ email() }}</span> manziliga
     kod yuborildi. Agar hisobingiz allaqachon mavjud bo'lsa —
     <a routerLink="/auth/full/sign-in" class="text-green-400 hover:underline font-medium">
       kiring
@@ -44,12 +44,12 @@
     </button>
   </form>
 
-  <p class="flex gap-1 text-sm text-center text-gray-500 mt-6">
+  <p class="flex gap-1 text-sm text-center text-app-text-muted mt-6">
     Kod kelmadimi?
     @if (resendOtpLoading()) {
       <tui-loader class="w-20" size="xs" />
     } @else if (resendCooldown() > 0) {
-      <span class="text-gray-400">{{ resendCooldown() }}s kutib turing</span>
+      <span class="text-app-text-muted">{{ resendCooldown() }}s kutib turing</span>
     } @else {
       <a (click)="onResend()" class="font-semibold cursor-pointer no-underline hover:underline text-green-400 hover:text-green-500 transition-colors">
         Qayta yuborish
