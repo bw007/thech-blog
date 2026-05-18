@@ -42,12 +42,25 @@ export class ArticleCardComponent {
   });
   readonly dropdownOpen = signal(false);
 
-  protected getArticleContent(content: Article['content']) {
-    return this.sanitizer.bypassSecurityTrustHtml(generateHTML(content, [
-      StarterKit,
-      Image,
-      Figure,
-      Figcaption,
-    ]))
+  protected getArticleText(content: Article['content']): string {
+    const text = this.extractText(content);
+    return text.replace(/\s+/g, ' ').trim();
+  }
+
+  private extractText(node: any): string {
+    if (!node) return '';
+
+    const skipTypes = ['image', 'figure', 'figcaption', 'horizontalRule'];
+    if (skipTypes.includes(node.type)) return '';
+
+    if (node.type === 'text') return node.text || '';
+
+    if (node.content?.length) {
+      return node.content
+        .map((child: any) => this.extractText(child))
+        .join(' ');
+    }
+
+    return '';
   }
 }
