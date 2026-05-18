@@ -1,4 +1,5 @@
 import { Routes } from "@angular/router";
+import { userResolver } from "@core/resolvers/user.resolver";
 
 export const profileRoutes: Routes = [
   {
@@ -7,8 +8,9 @@ export const profileRoutes: Routes = [
     redirectTo: 'overview'
   },
   {
-    path: 'overview',
-    loadComponent: () => import('./profile-overview/profile-overview.component').then(m => m.ProfileOverviewComponent)
+    path: ':user_name',
+    loadComponent: () => import('./profile-overview/profile-overview.component').then(m => m.ProfileOverviewComponent),
+    resolve: { selectedUser: userResolver }
   },
   {
     path: 'settings',
