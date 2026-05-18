@@ -55,7 +55,7 @@ export class ArticleCardComponent {
 
   private extractText(node: any): string {
     if (!node) return '';
-    console.log(node)
+
     if (this.skipTypes.has(node.type)) return '';
 
     if (node.type === 'text') return node.text || '';
