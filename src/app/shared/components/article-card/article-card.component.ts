@@ -6,10 +6,6 @@ import { TuiIcon, TuiDataList, TuiDropdown, TuiButton } from "@taiga-ui/core";
 import { TuiChip, TuiAvatar } from "@taiga-ui/kit";
 import type { Article } from "@core/models/article.model";
 import { AuthService } from "@core/services/auth.service";
-import { generateHTML } from "@tiptap/core";
-import StarterKit from "@tiptap/starter-kit";
-import Image from "@tiptap/extension-image";
-import { Figcaption, Figure } from "@features/editor/extensions/figure.extension";
 
 @Component({
   selector: 'app-article-card',
@@ -42,17 +38,22 @@ export class ArticleCardComponent {
   });
   readonly dropdownOpen = signal(false);
 
-  protected getArticleText(content: Article['content']): string {
-    const text = this.extractText(content);
-    return text.replace(/\s+/g, ' ').trim();
-  }
+  protected readonly articleText = computed(() => {
+    const content = this.article().content;
+
+    const nodes = content['content'];
+    const firstNodes = Array.isArray(nodes) ? nodes.slice(0, 4) : [];
+
+    return this.extractText({ type: 'doc', content: firstNodes })
+      .replace(/\s+/g, ' ')
+      .trim();
+  });
 
   private extractText(node: any): string {
     if (!node) return '';
 
     const skipTypes = ['image', 'figure', 'figcaption', 'horizontalRule'];
     if (skipTypes.includes(node.type)) return '';
-
     if (node.type === 'text') return node.text || '';
 
     if (node.content?.length) {
@@ -60,7 +61,6 @@ export class ArticleCardComponent {
         .map((child: any) => this.extractText(child))
         .join(' ');
     }
-
     return '';
   }
 }

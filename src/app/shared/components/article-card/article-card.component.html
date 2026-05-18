@@ -41,10 +41,9 @@
     <h3 class="text-xl lg:text-2xl font-bold leading-snug text-app-text-primary group-hover:text-green-400 transition-colors duration-200 line-clamp-1 m-0">
       {{ article().title }}
     </h3>
-    <p
-      class="mt-2 h-10 text-sm leading-snug text-app-text-secondary line-clamp-2"
-      [innerHTML]="getArticleText(article().content)"
-    ></p>
+    <p class="mt-2 h-10 text-sm leading-snug text-app-text-secondary line-clamp-2">
+      {{ articleText() }}
+    </p>
   </div>
 
   <div class="flex items-center justify-between gap-x-1.5 mt-1 z-20">
