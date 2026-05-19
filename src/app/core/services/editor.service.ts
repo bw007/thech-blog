@@ -4,7 +4,6 @@ import type { Article } from '../models/article.model';
 import { AuthService } from './auth.service';
 import { firstValueFrom, map, tap } from 'rxjs';
 import { Supabase } from '@core/config/supabase';
-import { User } from '@supabase/supabase-js';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,7 @@ export class EditorService {
   private auth = inject(AuthService);
   private supabase = inject(Supabase);
 
-  user = this.auth.currentUser();
+  user = this.auth.authUser();
 
   private _myArticles = signal<Article[]>([]);
   myArticles = this._myArticles.asReadonly();
@@ -67,7 +66,7 @@ export class EditorService {
 
   // Upload article image
   async uploadImage(file: File): Promise<string> {
-    const user = this.auth.currentUser();
+    const user = this.auth.authUser();
     if (!user) throw new Error('User not found');
 
     const ext = file.name.split('.').pop();
