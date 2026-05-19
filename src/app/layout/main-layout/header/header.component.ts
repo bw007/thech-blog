@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { NavigationEnd, Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { TuiButton, TuiIcon, TuiPopup } from '@taiga-ui/core';
 import { TuiDataList, TuiDropdown } from '@taiga-ui/core';
@@ -34,12 +34,19 @@ export class HeaderComponent implements OnInit {
   private auth = inject(AuthService);
 
   protected dropdownOpen = signal(false);
-  protected readonly user = this.auth.currentUser;
+  protected readonly user = this.auth.authUser;
   protected readonly isLoggedIn = this.auth.isLoggedIn;
   protected readonly isLoading = this.auth.isLoading;
   protected readonly darkMode = this.theme.darkMode;
 
   protected readonly open = signal(false);
+  protected readonly profileUrl = computed(() => {
+    const userName = this.user()?.['username'];
+    if (!userName) {
+      return '';
+    }
+    return `/profile/@${userName}`;
+  })
 
   ngOnInit(): void {
     this.router.events.pipe(
