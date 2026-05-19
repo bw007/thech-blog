@@ -85,66 +85,23 @@
 
   <tui-data-list tuiDataListDropdownManager size="m">
     <tui-opt-group>
+      @for (item of menuItems(); track item.route) {
       <button
-        [routerLink]="profileUrl()"
         tuiOption
         new
         type="button"
+        [routerLink]="item.route"
         routerLinkActive="text-app-text-primary! bg-app-bg-alt!"
         class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
       >
         <tui-icon
           class="text-app-text-secondary!"
-          icon="@tui.user"
+          [icon]="item.icon"
           [style.height.rem]="1"
         />
-        Profil
+        {{ item.label }}
       </button>
-      <button
-        routerLink="articles/my-articles"
-        tuiOption
-        new
-        type="button"
-        routerLinkActive="text-app-text-primary! bg-app-bg-alt!"
-        class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
-      >
-        <tui-icon
-          class="text-app-text-secondary!"
-          icon="@tui.notebook-pen"
-          [style.height.rem]="1"
-        />
-        Maqolalarim
-      </button>
-      <button
-        routerLink="#"
-        tuiOption
-        new
-        type="button"
-        routerLinkActive="text-app-text-primary! bg-app-bg-alt!"
-        class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
-      >
-        <tui-icon
-          class="text-app-text-secondary!"
-          icon="@tui.message-circle-question-mark"
-          [style.height.rem]="1"
-        />
-        Yordam
-      </button>
-      <button
-        routerLink="profile/settings"
-        tuiOption
-        new
-        type="button"
-        routerLinkActive="text-app-text-primary! bg-app-bg-alt!"
-        class="text-app-text-secondary! hover:text-app-text-primary! transition-colors!"
-      >
-        <tui-icon
-          class="text-app-text-secondary!"
-          icon="@tui.settings"
-          [style.height.rem]="1"
-        />
-        Sozlamalar
-      </button>
+      }
     </tui-opt-group>
 
     <tui-opt-group>
