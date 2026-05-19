@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { generateHTML } from '@tiptap/core'
 import { DatePipe, Location } from '@angular/common';
 import { TuiButton, TuiIcon } from "@taiga-ui/core";
-import { TuiChip } from "@taiga-ui/kit";
+import { TuiAvatar, TuiChip } from "@taiga-ui/kit";
 import type { Article } from '@core/models/article.model';
 import StarterKit from '@tiptap/starter-kit';
 import Image from '@tiptap/extension-image';
@@ -19,7 +19,8 @@ import { Supabase } from '@core/config/supabase';
     TuiButton,
     TuiIcon,
     DatePipe,
-    TuiChip
+    TuiChip,
+    TuiAvatar
   ],
 })
 export class ArticleComponent {
