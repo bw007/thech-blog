@@ -47,7 +47,7 @@
   </div>
 
   <div class="flex items-center justify-between gap-x-1.5 mt-1 z-20">
-    <a [routerLink]="['/profile', article().author.username]" class="flex items-center gap-x-1.5 text-app-text-secondary! hover:underline hover:text-app-text-primary! transition-colors! duration-200">
+    <a [routerLink]="['/profile', '@' + article().author.username]" class="flex items-center gap-x-1.5 text-app-text-secondary! hover:underline hover:text-app-text-primary! transition-colors! duration-200">
       <tui-avatar [src]="article().author.avatar_url" size="xs" />
       {{ article().author.full_name }}
     </a>
