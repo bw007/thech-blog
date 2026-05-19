@@ -17,16 +17,12 @@
           {{ article!.title }}
         </h1>
         <div class="flex items-center gap-2.5 flex-wrap text-xs mb-5">
-          <div class="flex items-center gap-2">
-            <img
-              [src]="article!.author.avatar_url || 'https://ui-avatars.com/api/?name=' + article!.author.full_name"
-              alt=""
-              class="h-7 w-7 rounded-full bg-app-bg-alt border border-app-border object-cover"
-            >
-            <span class="text-[13px] font-medium text-app-text-primary">
-              {{ article!.author.full_name }}
+          <a [routerLink]="['/profile', '@' + article.author.username]" class="flex items-center gap-x-1.5 text-app-text-secondary! hover:underline hover:text-app-text-primary! transition-colors! duration-200">
+            <tui-avatar [src]="article.author.avatar_url" size="xs" />
+            <span class="font-semibold text-app-text-primary">
+              {{ article.author.full_name }}
             </span>
-          </div>
+          </a>
 
           <span class="text-app-border">·</span>
 
