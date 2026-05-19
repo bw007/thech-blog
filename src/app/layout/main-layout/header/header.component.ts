@@ -50,7 +50,7 @@ export class HeaderComponent implements OnInit {
     { icon: '@tui.user', label: 'Profil', route: this.profileUrl() },
     { icon: '@tui.notebook-pen', label: 'Maqolalarim', route: 'articles/my-articles' },
     { icon: '@tui.message-circle-question-mark', label: 'Yordam', route: '#' },
-    { icon: '@tui.settings', label: 'Sozlamalar', route: 'profile/settings' },
+    { icon: '@tui.settings', label: 'Sozlamalar', route: 'profile-settings' },
   ]);
 
   ngOnInit(): void {
