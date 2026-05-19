@@ -34,7 +34,7 @@ export class ArticleCardComponent {
   deleteArticle = output<string>();
 
   readonly isMyArticle = computed(() => {
-    return this.auth.currentUser()?.id === this.article().author_id;
+    return this.auth.authUser()?.id === this.article().author_id;
   });
   readonly dropdownOpen = signal(false);
 
