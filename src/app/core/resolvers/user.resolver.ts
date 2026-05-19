@@ -1,8 +1,8 @@
 import type { ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot } from "@angular/router";
-import {inject} from "@angular/core";
-import {UserService} from "../services/user.service";
-import {catchError, finalize, of} from "rxjs";
-import {ProgressService} from "@core/services/progress.service";
+import { inject } from "@angular/core";
+import { catchError, finalize, of} from "rxjs";
+import { UserService } from "../services/user.service";
+import { ProgressService } from "@core/services/progress.service";
 
 export const userResolver: ResolveFn<any> = (
   route: ActivatedRouteSnapshot,
@@ -16,7 +16,7 @@ export const userResolver: ResolveFn<any> = (
 
   progress.start();
 
-  return user.getSelectedUser(userName).pipe(
+  return user.getSelectedUser(userName.slice(1)).pipe(
     catchError(() => of(null)),
     finalize(() => progress.finish())
   )
