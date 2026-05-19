@@ -1,7 +1,6 @@
 import { Component } from "@angular/core";
 import { RouterOutlet } from "@angular/router";
 import { HeaderComponent } from "./header/header.component";
-import { FooterComponnet } from "./footer/footer.component";
 
 @Component({
   selector: 'app-main-layout',
@@ -9,7 +8,6 @@ import { FooterComponnet } from "./footer/footer.component";
   imports: [
     RouterOutlet,
     HeaderComponent,
-    FooterComponnet
   ]
 })
 
