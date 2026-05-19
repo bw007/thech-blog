@@ -1,6 +1,6 @@
 import { Routes } from '@angular/router';
-import { authGuard } from '@core/guards/auth.guard';
 import { articleResolver } from '@core/resolvers/article.resolver';
+import { userResolver } from "@core/resolvers/user.resolver";
 
 export const mainRoutes: Routes = [
   {
@@ -17,8 +17,12 @@ export const mainRoutes: Routes = [
     resolve: { article: articleResolver }
   },
   {
-    path: 'profile',
-    loadChildren: () => import('@features/profile/profile.routes').then(m => m.profileRoutes),
-    canActivate: [authGuard]
+    path: 'profile/:user_name',
+    loadComponent: () => import('@features/profile-overview/profile-overview.component').then(m => m.ProfileOverviewComponent),
+    resolve: { selectedUser: userResolver }
+  },
+  {
+    path: 'profile-settings',
+    loadComponent: () => import('@features/profile-settings/profile-settings.component').then(m => m.ProfileSettingsComponent)
   }
 ];
