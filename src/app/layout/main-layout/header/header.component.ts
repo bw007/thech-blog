@@ -40,13 +40,18 @@ export class HeaderComponent implements OnInit {
   protected readonly darkMode = this.theme.darkMode;
 
   protected readonly open = signal(false);
+
   protected readonly profileUrl = computed(() => {
-    const userName = this.user()?.['username'];
-    if (!userName) {
-      return '';
-    }
-    return `/profile/@${userName}`;
-  })
+    const username = this.user()?.username;
+    return username ? `/profile/@${username}` : '';
+  });
+
+  protected readonly menuItems = computed(() => [
+    { icon: '@tui.user', label: 'Profil', route: this.profileUrl() },
+    { icon: '@tui.notebook-pen', label: 'Maqolalarim', route: 'articles/my-articles' },
+    { icon: '@tui.message-circle-question-mark', label: 'Yordam', route: '#' },
+    { icon: '@tui.settings', label: 'Sozlamalar', route: 'profile/settings' },
+  ]);
 
   ngOnInit(): void {
     this.router.events.pipe(
