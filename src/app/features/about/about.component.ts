@@ -57,7 +57,7 @@ export class AboutComponent {
     {
       icon: '@tui.globe',
       title: 'Ochiqlik',
-      description: 'Barcha kontent O\'zbek tilida, o\'zbek dasturchilar uchun yaratiladi.'
+      description: 'Barcha kontent O\'zbek tilida, o\'zbek o\'quvchilar uchun yaratiladi.'
     },
     {
       icon: '@tui.zap',
