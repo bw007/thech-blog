@@ -1,0 +1,332 @@
+<div class="max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-16">
+  <!-- Hero -->
+  <section class="mb-12">
+    <div class="flex items-center gap-2 mb-6">
+      <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+      <span class="text-sm font-medium text-app-text-muted uppercase tracking-widest">Yordam markazi</span>
+    </div>
+    <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold text-app-text-primary tracking-tight leading-tight mb-3">
+      Sizga qanday yordam bera olamiz?
+    </h1>
+    <p class="lg:text-base text-app-text-secondary max-w-xl leading-relaxed">
+      Savollaringizga javob toping yoki jamoamizga murojaat qiling.
+    </p>
+  </section>
+
+  <!-- Tabs -->
+  <div class="flex items-center gap-1 p-1 bg-app-bg-alt border border-app-border rounded-xl mb-10 w-fit">
+    @for (tab of tabs; track tab.id) {
+    <button type="button" (click)="activeTab.set(tab.id)"
+      class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all cursor-pointer border-none outline-none"
+      [class.bg-app-bg]="activeTab() === tab.id" [class.text-app-text-primary]="activeTab() === tab.id"
+      [class.shadow-sm]="activeTab() === tab.id" [class.border]="activeTab() === tab.id"
+      [class.border-app-border]="activeTab() === tab.id" [class.text-app-text-muted]="activeTab() !== tab.id"
+      [class.hover:text-app-text-secondary]="activeTab() !== tab.id">
+      <tui-icon [icon]="tab.icon" [style.height.rem]="0.875" />
+      {{ tab.label }}
+    </button>
+    }
+  </div>
+
+  @if (activeTab() === 'faq') {
+  <section>
+    @if (filteredFaq.length === 0) {
+    <div class="flex flex-col items-center justify-center py-16 gap-3 text-center">
+      <div class="w-14 h-14 rounded-2xl bg-app-bg-alt border border-app-border flex items-center justify-center">
+        <tui-icon icon="@tui.search-x" [style.height.rem]="1.5" class="text-app-text-muted!" />
+      </div>
+      <p class="text-sm font-medium text-app-text-muted">
+        "{{ searchQuery() }}" bo'yicha hech narsa topilmadi
+      </p>
+      <button tuiButton appearance="flat" size="s" (click)="searchQuery.set('')" class="text-green-400! font-medium!">
+        Filterni tozalash
+      </button>
+    </div>
+    } @else {
+    <div class="flex flex-col gap-2">
+      @for (item of filteredFaq; track item.question; let i = $index) {
+      <div class="border border-app-border rounded-xl overflow-hidden transition-colors"
+        [class.border-green-200]="item.open">
+        <button type="button" (click)="toggleFaq(i)"
+          class="w-full flex items-center justify-between gap-4 px-5 py-4 text-left cursor-pointer bg-app-card hover:bg-app-bg-alt transition-colors border-none outline-none">
+          <span class="text-sm font-semibold transition-colors" [class.text-app-text-primary]="!item.open"
+            [class.text-green-400]="item.open">
+            {{ item.question }}
+          </span>
+          <tui-icon [icon]="item.open ? '@tui.chevron-up' : '@tui.chevron-down'" [style.height.rem]="0.875"
+            class="shrink-0 transition-colors" [class.text-green-400!]="item.open"
+            [class.text-app-text-muted!]="!item.open" />
+        </button>
+
+        @if (item.open) {
+        <div class="px-5 pb-5 pt-1 bg-app-card border-t border-app-border/60">
+          <p class="text-sm text-app-text-secondary leading-relaxed">
+            {{ item.answer }}
+          </p>
+        </div>
+        }
+      </div>
+      }
+    </div>
+    }
+
+    <!-- Still need help -->
+    <div
+      class="mt-10 p-6 rounded-xl border border-app-border bg-app-bg-alt flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+      <div>
+        <h3 class="text-sm font-bold text-app-text-primary mb-1">Javob topa olmadingizmi?</h3>
+        <p class="text-sm text-app-text-muted">Jamoamizga to'g'ridan-to'g'ri murojaat qiling.</p>
+      </div>
+      <button tuiButton appearance="primary" size="s" (click)="activeTab.set('support')"
+        class="font-medium! shrink-0 bg-green-500! hover:bg-green-600! border-none!">
+        Yordam so'rash
+      </button>
+    </div>
+  </section>
+  }
+
+  @if (activeTab() === 'docs') {
+  <section>
+    <div class="grid sm:grid-cols-2 gap-5">
+      @for (section of docSections; track section.title) {
+      <div
+        class="flex flex-col p-6 rounded-xl border border-app-border bg-app-card hover:border-green-400/30 transition-colors group">
+        <!-- Section header -->
+        <div class="flex items-center gap-3 mb-4">
+          <div
+            class="w-10 h-10 rounded-xl bg-green-400/10 flex items-center justify-center shrink-0 group-hover:bg-green-400/20 transition-colors">
+            <tui-icon [icon]="section.icon" [style.height.rem]="1.1" class="text-green-400!" />
+          </div>
+          <div>
+            <h3 class="text-sm font-bold text-app-text-primary">{{ section.title }}</h3>
+            <p class="text-xs text-app-text-muted mt-0.5">{{ section.description }}</p>
+          </div>
+        </div>
+
+        <!-- Articles list -->
+        <div class="flex flex-col gap-1 flex-1">
+          @for (article of section.articles; track article.title) {
+          <button type="button"
+            class="flex items-center justify-between gap-3 px-3 py-2.5 rounded-lg hover:bg-app-bg-alt transition-colors cursor-pointer group/item border-none outline-none text-left w-full">
+            <div class="flex items-center gap-2.5 min-w-0">
+              <tui-icon icon="@tui.file-text" [style.height.rem]="0.8" class="text-app-text-muted! shrink-0" />
+              <span
+                class="text-sm text-app-text-secondary group-hover/item:text-app-text-primary transition-colors truncate">
+                {{ article.title }}
+              </span>
+            </div>
+            <div class="flex items-center gap-2 shrink-0">
+              <span class="text-xs text-app-text-muted">{{ article.time }}</span>
+              <tui-icon icon="@tui.arrow-right" [style.height.rem]="0.7"
+                class="text-app-text-muted! opacity-0 group-hover/item:opacity-100 transition-opacity" />
+            </div>
+          </button>
+          }
+        </div>
+
+        <!-- Footer -->
+        <div class="mt-4 pt-4 border-t border-app-border/60">
+          <button tuiButton appearance="flat" size="xs" class="text-green-400! font-medium! px-0! hover:opacity-75!">
+            Barchasini ko'rish
+            <tui-icon icon="@tui.arrow-right" [style.height.rem]="0.75" />
+          </button>
+        </div>
+      </div>
+      }
+    </div>
+
+    <!-- Quick links -->
+    <div class="mt-8">
+      <h3 class="text-sm font-bold text-app-text-primary mb-4">Tez havolalar</h3>
+      <div class="grid sm:grid-cols-3 gap-3">
+        @for (
+        link of [
+        { icon: '@tui.video', title: 'Video darsliklar', desc: "Qadamba-qadam ko'rsatmalar" },
+        { icon: '@tui.github', title: 'GitHub', desc: 'Ochiq manba kod' },
+        { icon: '@tui.send', title: 'Telegram kanal', desc: "Yangiliklar va e'lonlar" },
+        ];
+        track link.title
+        ) {
+        <div
+          class="flex items-center gap-3 p-4 rounded-xl border border-app-border bg-app-card hover:border-green-400/30 transition-colors cursor-pointer group">
+          <div
+            class="w-9 h-9 rounded-lg bg-app-bg-alt flex items-center justify-center shrink-0 group-hover:bg-green-400/10 transition-colors">
+            <tui-icon [icon]="link.icon" [style.height.rem]="1"
+              class="text-app-text-muted! group-hover:text-green-400! transition-colors" />
+          </div>
+          <div>
+            <span class="text-sm font-semibold text-app-text-primary block">{{
+              link.title
+              }}</span>
+            <span class="text-xs text-app-text-muted">{{ link.desc }}</span>
+          </div>
+        </div>
+        }
+      </div>
+    </div>
+  </section>
+  }
+
+  @if (activeTab() === 'support') {
+  <section>
+    <div class="grid md:grid-cols-5 gap-8">
+      <!-- Left: info -->
+      <div class="md:col-span-2 flex flex-col gap-4">
+        <div>
+          <h2 class="text-xl font-bold text-app-text-primary mb-2">Murojaat yuboring</h2>
+          <p class="text-sm text-app-text-secondary leading-relaxed">
+            Savol, taklif yoki xatolik haqida yozing. Odatda 24 soat ichida javob beramiz.
+          </p>
+        </div>
+
+        <!-- Contact cards -->
+        <div class="flex flex-col gap-3 mt-2">
+          @for (
+          item of [
+          {
+          icon: '@tui.send',
+          label: 'Telegram',
+          value: '@thechblog',
+          sub: 'Tezroq javob',
+          href: 'https://t.me/thechblog',
+          },
+          {
+          icon: '@tui.mail',
+          label: 'Email',
+          value: 'help@thechblog.uz',
+          sub: '24 soat ichida',
+          href: 'mailto:help@thechblog.uz',
+          },
+          ];
+          track item.label
+          ) {
+          <a [href]="item.href"
+            class="flex items-center gap-3 p-4 rounded-xl border border-app-border bg-app-card hover:border-green-400/40 transition-colors no-underline group">
+            <div
+              class="w-9 h-9 rounded-lg bg-app-bg-alt flex items-center justify-center shrink-0 group-hover:bg-green-400/10 transition-colors">
+              <tui-icon [icon]="item.icon" [style.height.rem]="1"
+                class="text-app-text-muted! group-hover:text-green-400! transition-colors" />
+            </div>
+            <div>
+              <span class="text-sm font-semibold text-app-text-primary block">{{
+                item.value
+                }}</span>
+              <span class="text-xs text-app-text-muted">{{ item.sub }}</span>
+            </div>
+          </a>
+          }
+        </div>
+
+        <!-- Working hours -->
+        <div class="p-4 rounded-xl border border-app-border bg-app-bg-alt mt-auto">
+          <div class="flex items-center gap-2 mb-2">
+            <span class="w-2 h-2 rounded-full bg-green-400 animate-pulse"></span>
+            <span class="text-xs font-semibold text-app-text-primary">Ish vaqti</span>
+          </div>
+          <p class="text-xs text-app-text-muted leading-relaxed">
+            Dushanba – Juma: 09:00 – 18:00 (UTC+5)<br />
+            Shanba – Yakshanba: cheklangan
+          </p>
+        </div>
+      </div>
+
+      <!-- Right: form -->
+      <div class="md:col-span-3">
+        @if (submitted()) {
+        <div class="flex flex-col items-center justify-center h-full py-16 gap-4 text-center">
+          <div class="w-16 h-16 rounded-full bg-green-400/10 flex items-center justify-center">
+            <tui-icon icon="@tui.check" [style.height.rem]="1.75" class="text-green-400!" />
+          </div>
+          <div>
+            <h3 class="text-lg font-bold text-app-text-primary mb-1">
+              Murojaatingiz yuborildi!
+            </h3>
+            <p class="text-sm text-app-text-muted">
+              24 soat ichida email orqali javob beramiz.
+            </p>
+          </div>
+          <button tuiButton appearance="outline-grayscale" size="s" (click)="submitted.set(false)"
+            class="font-medium! mt-2">
+            Yangi murojaat
+          </button>
+        </div>
+        } @else {
+        <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+          <!-- Name + Email -->
+          <div class="grid sm:grid-cols-2 gap-4">
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-semibold text-app-text-muted uppercase tracking-wider">
+                Ism <span class="text-red-400">*</span>
+              </label>
+              <input type="text" placeholder="Ismingiz" [value]="form().name"
+                (input)="updateField('name', $any($event.target).value)" required
+                class="w-full bg-app-bg-alt border border-app-border rounded-xl px-4 py-3 text-sm text-app-text-primary placeholder:text-app-text-muted focus:outline-none focus:border-green-400 transition-colors" />
+            </div>
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-semibold text-app-text-muted uppercase tracking-wider">
+                Email <span class="text-red-400">*</span>
+              </label>
+              <input type="email" placeholder="email@example.com" [value]="form().email"
+                (input)="updateField('email', $any($event.target).value)" required
+                class="w-full bg-app-bg-alt border border-app-border rounded-xl px-4 py-3 text-sm text-app-text-primary placeholder:text-app-text-muted focus:outline-none focus:border-green-400 transition-colors" />
+            </div>
+          </div>
+
+          <!-- Type -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-app-text-muted uppercase tracking-wider">
+              Murojaat turi
+            </label>
+            <div class="flex flex-wrap gap-2">
+              @for (type of ticketTypes; track type.value) {
+              <button type="button" (click)="updateField('type', type.value)"
+                class="px-3.5 py-1.5 rounded-lg text-sm font-medium border transition-all cursor-pointer outline-none"
+                [class.bg-green-200]="form().type === type.value" [class.border-green-200]="form().type === type.value"
+                [class.text-green-400]="form().type === type.value" [class.bg-app-bg-alt]="form().type !== type.value"
+                [class.border-app-border]="form().type !== type.value"
+                [class.text-app-text-secondary]="form().type !== type.value">
+                {{ type.label }}
+              </button>
+              }
+            </div>
+          </div>
+
+          <!-- Subject -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-app-text-muted uppercase tracking-wider">
+              Mavzu <span class="text-red-400">*</span>
+            </label>
+            <input type="text" placeholder="Murojaat mavzusi" [value]="form().subject"
+              (input)="updateField('subject', $any($event.target).value)" required
+              class="w-full bg-app-bg-alt border border-app-border rounded-xl px-4 py-3 text-sm text-app-text-primary placeholder:text-app-text-muted focus:outline-none focus:border-green-400 transition-colors" />
+          </div>
+
+          <!-- Message -->
+          <div class="flex flex-col gap-1.5">
+            <label class="text-xs font-semibold text-app-text-muted uppercase tracking-wider">
+              Xabar <span class="text-red-400">*</span>
+            </label>
+            <textarea rows="5" placeholder="Muammo yoki savolingizni batafsil yozing..." [value]="form().message"
+              (input)="updateField('message', $any($event.target).value)" required
+              class="w-full bg-app-bg-alt border border-app-border rounded-xl px-4 py-3 text-sm text-app-text-primary placeholder:text-app-text-muted focus:outline-none focus:border-green-400 transition-colors resize-none leading-relaxed"></textarea>
+          </div>
+
+          <!-- Submit -->
+          <button tuiButton type="submit" appearance="primary" size="m" [disabled]="
+                  !form().name || !form().email || !form().subject || !form().message || loading()
+                " class="w-full font-medium! bg-green-500! hover:bg-green-600! border-none!">
+            @if (loading()) {
+            <tui-icon icon="@tui.loader-circle" [style.height.rem]="0.875" class="animate-spin" />
+            Yuborilmoqda...
+            } @else {
+            <tui-icon icon="@tui.send" [style.height.rem]="0.875" />
+            Murojaat yuborish
+            }
+          </button>
+        </form>
+        }
+      </div>
+    </div>
+  </section>
+  }
+</div>
