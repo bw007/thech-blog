@@ -1,0 +1,224 @@
+<div class="max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-16">
+  <!-- Hero -->
+  <section class="mb-20">
+    <div class="flex items-center gap-2 mb-6">
+      <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+      <span class="text-sm font-medium text-app-text-muted uppercase tracking-widest">
+        Loyiha haqida
+      </span>
+    </div>
+    <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold text-app-text-primary tracking-tight leading-[1.1] mb-6">
+      O'zbek o'quvchilar uchun
+      <span class="text-green-400">bilim platformasi</span>
+    </h1>
+    <p class="lg:text-base text-app-text-secondary max-w-2xl mb-8">
+      ThechBlog — dasturchilar, muhandislar va tadqiqotchilar o'z tajribalarini ulashishi va yangi
+      texnologiyalarni o'rganishi uchun yaratilgan ochiq platforma.
+    </p>
+    <div class="flex flex-wrap gap-3">
+      <a routerLink="/" tuiButton appearance="accent" size="s" class="font-medium! px-6!">
+        O'qing
+      </a>
+      <a
+        href="#contact"
+        tuiButton
+        appearance="outline-grayscale"
+        size="s"
+        class="font-medium! px-6!"
+      >
+        Bog'lanish
+      </a>
+    </div>
+  </section>
+
+  <!-- Stats -->
+  <section class="mb-20">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-px bg-app-border rounded-2xl overflow-hidden border border-app-border">
+      @for (stat of stats; track stat.label) {
+        <div class="bg-app-bg px-6 py-8 flex flex-col gap-1">
+          <span class="text-3xl md:text-4xl font-bold text-app-text-primary tracking-tight">
+            {{ stat.value }}
+          </span>
+          <span class="text-sm text-app-text-muted font-medium">{{ stat.label }}</span>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Story -->
+  <section class="mb-20">
+    <div class="grid md:grid-cols-2 gap-12 items-start">
+      <div>
+        <h2 class="text-2xl md:text-3xl font-bold text-app-text-primary mb-4 leading-tight">
+          Nima uchun ThechBlog yaratildi?
+        </h2>
+        <div class="flex flex-col gap-4 lg:text-base text-app-text-secondary leading-relaxed">
+          <p>
+            O'zbekistonda texnologiya olamiga qiziquvchilar ko'p, lekin o'zbek tilidagi kontentlar
+            mamlakat salohiyati va o'sib borayotgan aholi sonini hisobga olsa hali ancha kam. Shu
+            bois o'zbek tilidagi ma'lumotlarni ko'paytirish va bilim tarqatish uchun ushbu loyiha
+            ishlab chiqildi.
+          </p>
+        </div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="flex flex-col gap-0">
+        @for (item of timeline; track item.year) {
+          <div class="flex gap-4">
+            <div class="flex flex-col items-center">
+              <div class="w-2.5 h-2.5 rounded-full bg-green-400 mt-1.5 shrink-0"></div>
+              @if (!$last) {
+                <div class="w-px flex-1 bg-app-border my-1"></div>
+              }
+            </div>
+            <div class="pb-6">
+              <span class="text-xs font-semibold text-green-400 uppercase tracking-wider">
+                {{ item.year }}
+              </span>
+              <h3 class="text-sm font-bold text-app-text-primary mt-0.5">{{ item.title }}</h3>
+              <p class="text-sm text-app-text-muted mt-0.5">{{ item.desc }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Values -->
+  <section class="mb-20">
+    <div class="mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-app-text-primary">Biz nimaga ishonamiz</h2>
+    </div>
+    <div class="grid sm:grid-cols-2 gap-4">
+      @for (value of values; track value.title) {
+        <div class="p-6 rounded-xl border border-app-border bg-app-card hover:border-green-400/40 transition-colors group">
+          <div class="w-10 h-10 rounded-xl bg-green-400/10 flex items-center justify-center mb-4 group-hover:bg-green-400/20 transition-colors">
+            <tui-icon [icon]="value.icon" [style.height.rem]="1.1" class="text-green-400!" />
+          </div>
+          <h3 class="text-base font-bold text-app-text-primary mb-2">{{ value.title }}</h3>
+          <p class="text-sm text-app-text-secondary leading-relaxed">{{ value.description }}</p>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section id="contact" class="mb-8">
+    <div class="mb-8">
+      <h2 class="text-2xl md:text-3xl font-bold text-app-text-primary mb-2">
+        Biz bilan bog'laning
+      </h2>
+      <p class="text-app-text-secondary text-[15px]">
+        Savollaringiz bormi? Muallif bo'lishni xohlaysizmi? Yozing!
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-5 gap-8">
+      <!-- Contact info -->
+      <div class="md:col-span-2 flex flex-col gap-4">
+        @for (contact of contacts; track contact.label) {
+          <a
+            [href]="contact.href"
+            class="flex items-center gap-4 p-4 rounded-xl border border-app-border bg-app-card hover:border-green-400/40 transition-colors no-underline group"
+          >
+            <div class="w-10 h-10 rounded-xl bg-app-bg-alt flex items-center justify-center shrink-0 group-hover:bg-green-400/10 transition-colors">
+              <tui-icon
+                [icon]="contact.icon"
+                [style.height.rem]="1"
+                class="text-app-text-muted! group-hover:text-green-400! transition-colors"
+              />
+            </div>
+            <div>
+              <span class="text-xs font-medium text-app-text-muted block">{{ contact.label }}</span>
+              <span class="text-sm font-semibold text-app-text-primary">{{ contact.value }}</span>
+            </div>
+          </a>
+        }
+      </div>
+
+      <!-- Form -->
+      <div class="md:col-span-3">
+        @if (submitted()) {
+          <div class="flex flex-col items-center justify-center h-full py-12 gap-3 text-center">
+            <div class="w-14 h-14 rounded-full bg-green-400/10 flex items-center justify-center">
+              <tui-icon icon="@tui.check" [style.height.rem]="1.5" class="text-green-400!" />
+            </div>
+            <h3 class="text-lg font-bold text-app-text-primary">Xabaringiz yuborildi!</h3>
+            <p class="text-sm text-app-text-muted">Tez orada javob beramiz.</p>
+            <button
+              tuiButton
+              appearance="flat"
+              size="s"
+              (click)="submitted.set(false)"
+              class="text-green-400! font-medium! mt-2"
+            >
+              Yana yozish
+            </button>
+          </div>
+        } @else {
+          <form (ngSubmit)="onSubmit()" class="flex flex-col gap-4">
+            <div class="grid sm:grid-cols-2 gap-4">
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold text-app-text-muted uppercase tracking-wider">
+                  Ism
+                </label>
+                <input
+                  type="text"
+                  placeholder="Ismingiz"
+                  [value]="form().name"
+                  (input)="updateField('name', $any($event.target).value)"
+                  required
+                  class="w-full bg-app-bg-alt border border-app-border rounded-xl px-4 py-3 text-sm text-app-text-primary placeholder:text-app-text-muted focus:outline-none focus:border-green-400 transition-colors"
+                />
+              </div>
+              <div class="flex flex-col gap-1.5">
+                <label class="text-xs font-semibold text-app-text-muted uppercase tracking-wider">
+                  Email
+                </label>
+                <input
+                  type="email"
+                  placeholder="email@example.com"
+                  [value]="form().email"
+                  (input)="updateField('email', $any($event.target).value)"
+                  required
+                  class="w-full bg-app-bg-alt border border-app-border rounded-xl px-4 py-3 text-sm text-app-text-primary placeholder:text-app-text-muted focus:outline-none focus:border-green-400 transition-colors"
+                />
+              </div>
+            </div>
+
+            <div class="flex flex-col gap-1.5">
+              <label class="text-xs font-semibold text-app-text-muted uppercase tracking-wider">
+                Xabar
+              </label>
+              <textarea
+                rows="5"
+                placeholder="Xabaringizni yozing..."
+                [value]="form().message"
+                (input)="updateField('message', $any($event.target).value)"
+                required
+                class="w-full bg-app-bg-alt border border-app-border rounded-xl px-4 py-3 text-sm text-app-text-primary placeholder:text-app-text-muted focus:outline-none focus:border-green-400 transition-colors resize-none leading-relaxed"
+              ></textarea>
+            </div>
+
+            <button
+              tuiButton
+              type="submit"
+              appearance="primary"
+              size="m"
+              [disabled]="!form().name || !form().email || !form().message || loading()"
+              class="w-full font-medium! bg-green-500! hover:bg-green-600! border-none!"
+            >
+              @if (loading()) {
+                Yuborilmoqda...
+              } @else {
+                Xabar yuborish
+                <tui-icon icon="@tui.send" [style.height.rem]="0.875" />
+              }
+            </button>
+          </form>
+        }
+      </div>
+    </div>
+  </section>
+</div>
