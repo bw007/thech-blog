@@ -1,0 +1,160 @@
+<div class="max-w-5xl mx-auto px-4 md:px-6 py-12 md:py-16">
+  <!-- Header -->
+  <section class="mb-12">
+    <div class="flex items-center gap-2 mb-6">
+      <span class="w-2 h-2 bg-green-400 rounded-full"></span>
+      <span class="text-sm font-medium text-app-text-muted uppercase tracking-widest">Hamjamiyat</span>
+    </div>
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6">
+      <div>
+        <h1 class="text-2xl md:text-4xl lg:text-5xl font-bold text-app-text-primary tracking-tight leading-tight mb-3">
+          Mualliflar
+        </h1>
+        <p class="lg:text-base text-app-text-secondary max-w-lg leading-tight">
+          ThechBlogga hissa qo'shayotgan tajribali dasturchilar va texnik mutaxassislar.
+        </p>
+      </div>
+
+      <!-- Search -->
+      <div class="relative w-full sm:w-64 shrink-0">
+        <input type="text" placeholder="Muallif qidirish..." [value]="searchQuery()"
+          (input)="searchQuery.set($any($event.target).value)"
+          class="w-full bg-app-bg-alt border border-app-border rounded-xl pl-9 pr-4 py-2.5 text-sm text-app-text-primary placeholder:text-app-text-muted focus:outline-none focus:border-green-400 transition-colors" />
+      </div>
+    </div>
+  </section>
+
+  <!-- Authors count -->
+  @if (!isLoading()) {
+  <p class="text-sm text-app-text-muted mb-6">
+    {{ filteredAuthors().length }} ta muallif topildi
+  </p>
+  }
+
+  <!-- Loading -->
+  @if (isLoading()) {
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    @for (item of [1, 2, 3, 4, 5, 6]; track item) {
+    <div class="p-6 rounded-xl border border-app-border bg-app-card animate-pulse">
+      <div class="flex items-center gap-3 mb-4">
+        <div class="w-12 h-12 rounded-full bg-app-bg-alt"></div>
+        <div class="flex flex-col gap-2">
+          <div class="w-28 h-3.5 bg-app-bg-alt rounded"></div>
+          <div class="w-20 h-3 bg-app-bg-alt rounded"></div>
+        </div>
+      </div>
+      <div class="w-full h-3 bg-app-bg-alt rounded mb-2"></div>
+      <div class="w-3/4 h-3 bg-app-bg-alt rounded"></div>
+    </div>
+    }
+  </div>
+  }
+
+  <!-- Authors grid -->
+  @if (!isLoading()) {
+  @if (filteredAuthors().length === 0) {
+  <div class="flex flex-col items-center justify-center py-20 gap-3 text-center">
+    <div class="w-14 h-14 rounded-2xl bg-app-bg-alt border border-app-border flex items-center justify-center">
+      <tui-icon icon="@tui.users" [style.height.rem]="1.5" class="text-app-text-muted!" />
+    </div>
+    <p class="text-sm font-medium text-app-text-muted">
+      @if (searchQuery()) {
+      "{{ searchQuery() }}" bo'yicha muallif topilmadi
+      } @else {
+      Hozircha mualliflar yo'q
+      }
+    </p>
+    @if (searchQuery()) {
+    <button tuiButton appearance="flat" size="s" (click)="searchQuery.set('')" class="text-green-400! font-medium!">
+      Filterni tozalash
+    </button>
+    }
+  </div>
+  } @else {
+  <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+    @for (author of filteredAuthors(); track author.id) {
+    <div
+      class="group flex flex-col p-6 rounded-xl border border-app-border bg-app-card hover:border-green-400/40 transition-all duration-200">
+      <!-- Author info -->
+      <div class="flex items-start justify-between gap-3 mb-4">
+        <div class="flex items-center gap-3">
+          <a [routerLink]="['/profile', author.username]">
+            <tui-avatar [src]="author.avatar_url || '@tui.user'" size="l" tuiAvatarOutline
+              class="border-app-border! hover:border-green-400/50! transition-colors" />
+          </a>
+          <div class="min-w-0">
+            <a [routerLink]="['/profile', author.username]"
+              class="block text-sm font-bold text-app-text-primary hover:text-green-400 transition-colors no-underline truncate">
+              {{ author.full_name }}
+            </a>
+            <span class="text-xs text-app-text-muted">&#64;{{ author.username }}</span>
+          </div>
+        </div>
+
+        <!-- Posts count badge -->
+        <div
+          class="flex flex-col items-center shrink-0 bg-app-bg-alt rounded-lg px-2.5 py-1.5 border border-app-border">
+          <span class="text-base font-bold text-app-text-primary leading-none">{{
+            author.posts_count
+            }}</span>
+          <span class="text-[10px] text-app-text-muted font-medium mt-0.5">maqola</span>
+        </div>
+      </div>
+
+      <!-- Bio -->
+      <p class="text-sm text-app-text-secondary leading-relaxed flex-1 line-clamp-2 mb-4">
+        {{ author.bio || "Bio hali qo'shilmagan." }}
+      </p>
+
+      <!-- Footer -->
+      <div class="flex items-center justify-between pt-4 border-t border-app-border/60">
+        <a [routerLink]="['/profile', author.username]" tuiButton appearance="flat" size="xs"
+          class="text-green-400! font-medium! px-0! hover:opacity-75!">
+          Profilni ko'rish
+          <tui-icon icon="@tui.arrow-right" [style.height.rem]="0.75" />
+        </a>
+
+        <!-- Social links -->
+        <div class="flex items-center gap-1">
+          @for (link of getSocialLinks(author); track link.label) {
+          <a [href]="link.href" target="_blank" rel="noopener noreferrer"
+            class="w-7 h-7 flex items-center justify-center rounded-lg text-app-text-muted hover:text-app-text-primary hover:bg-app-bg-alt transition-colors"
+            [attr.aria-label]="link.label">
+            <tui-icon [icon]="link.icon" [style.height.rem]="0.875" />
+          </a>
+          }
+        </div>
+      </div>
+    </div>
+    }
+  </div>
+  }
+  }
+
+  <!-- CTA - Muallif bo'lish -->
+  <section class="mt-16">
+    <div class="relative rounded-2xl border border-green-400/20 bg-green-400/5 overflow-hidden p-8 md:p-10">
+      <div
+        class="absolute top-0 right-0 w-64 h-64 bg-green-400/5 rounded-full -translate-y-1/2 translate-x-1/2 pointer-events-none">
+      </div>
+      <div class="relative">
+        <h2 class="text-2xl md:text-3xl font-bold text-app-text-primary mb-3 leading-snug">
+          Siz ham muallif bo'ling
+        </h2>
+        <p class="lg:text-base text-app-text-secondary leading-tight max-w-xl mb-6">
+          Dasturlash bo'yicha bilim va tajribangiz bormi? Maqola yozing, hamjamiyatga hissa qo'shing
+          va o'z auditoriyangizni toping.
+        </p>
+        <div class="flex flex-wrap gap-3">
+          <a routerLink="/editor" tuiButton appearance="primary" size="s"
+            class="font-medium! bg-green-500! hover:bg-green-600! border-none! px-4!">
+            Maqola yozish
+          </a>
+          <a routerLink="/about" tuiButton appearance="outline-grayscale" size="s" class="font-medium! px-4!">
+            Batafsil ma'lumot
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
