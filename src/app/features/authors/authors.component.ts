@@ -1,8 +1,9 @@
 import { Component, inject, OnInit, signal, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import {ActivatedRoute, ActivatedRouteSnapshot, RouterLink} from '@angular/router';
 import { TuiButton, TuiIcon } from '@taiga-ui/core';
 import { TuiAvatar, TuiAvatarOutline } from '@taiga-ui/kit';
 import { HttpClient } from '@angular/common/http';
+import {Profile} from "@core/models/user.model";
 
 export interface Author {
   id: string;
@@ -29,15 +30,15 @@ export interface Author {
 })
 export class AuthorsComponent implements OnInit {
   private http = inject(HttpClient);
+  private route = inject(ActivatedRoute);
 
-  protected authors = signal<Author[]>([]);
-  protected isLoading = signal(true);
+  protected readonly authors = this.route.snapshot.data['authors'] as Profile[];
   protected searchQuery = signal('');
 
   protected readonly filteredAuthors = computed(() => {
     const q = this.searchQuery().toLowerCase();
-    if (!q) return this.authors();
-    return this.authors().filter(a =>
+    if (!q) return this.authors;
+    return this.authors.filter(a =>
       a.full_name.toLowerCase().includes(q) ||
       a.username.toLowerCase().includes(q) ||
       a.bio?.toLowerCase().includes(q)
@@ -48,11 +49,11 @@ export class AuthorsComponent implements OnInit {
 
   }
 
-  protected getSocialLinks(author: Author) {
+  protected getSocialLinks(author: Profile) {
     const links = [];
-    if (author.github_url) links.push({ icon: '@tui.github', href: author.github_url, label: 'GitHub' });
-    if (author.twitter_url) links.push({ icon: '@tui.twitter', href: author.twitter_url, label: 'Twitter' });
-    if (author.telegram_url) links.push({ icon: '@tui.send', href: author.telegram_url, label: 'Telegram' });
+    if (author.github) links.push({ icon: '@tui.github', href: author.github, label: 'GitHub' });
+    if (author.twitter) links.push({ icon: '@tui.twitter', href: author.twitter, label: 'Twitter' });
+    if (author.telegram) links.push({ icon: '@tui.send', href: author.telegram, label: 'Telegram' });
     return links;
   }
 }
