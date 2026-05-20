@@ -283,7 +283,9 @@ export class AuthService {
 
     this.setLoadingProvider(null);
     localStorage.removeItem(storage.AUTH_PROVIDER);
-    await this.getUserProfile(data.session?.user.id!);
+    if (data.session) {
+      await this.getUserProfile(data.session?.user.id!);
+    }
     return data.session;
   }
 
