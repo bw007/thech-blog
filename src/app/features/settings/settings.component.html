@@ -1,0 +1,241 @@
+<div class="max-w-250 mx-auto px-4 sm:px-6 py-6 sm:py-10">
+  
+  <!-- Header & Back -->
+  <div class="mb-8 border-b border-app-border pb-6">
+    <a 
+      routerLink="/profile/overview"
+      class="inline-flex items-center gap-2 text-[13px] font-medium text-app-text-secondary hover:text-app-text-primary transition-colors mb-5 no-underline"
+    >
+      <tui-icon icon="@tui.arrow-left" [style.height.rem]="1"></tui-icon>
+      Profilga qaytish
+    </a>
+    <h1 class="text-2xl sm:text-3xl font-bold text-app-text-primary tracking-tight">Sozlamalar</h1>
+  </div>
+
+  <div class="flex flex-col md:flex-row gap-10 lg:gap-16">
+    
+    <!-- Left Sidebar (Tabs) -->
+    <aside class="w-full md:w-56 shrink-0">
+      <nav class="flex md:flex-col gap-1.5 overflow-x-auto md:overflow-visible pb-4 md:pb-0 scrollbar-hide">
+        <button 
+          (click)="setTab('profile')"
+          [class.bg-app-bg-alt]="activeTab() === 'profile'"
+          [class.text-app-text-primary]="activeTab() === 'profile'"
+          [class.text-app-text-secondary]="activeTab() !== 'profile'"
+          class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-colors hover:bg-app-bg-alt hover:text-app-text-primary whitespace-nowrap text-[14px] font-medium cursor-pointer outline-none border-none text-left"
+        >
+          <tui-icon icon="@tui.user" [style.height.rem]="1.1"></tui-icon>
+          Asosiy profil
+        </button>
+
+        <button 
+          (click)="setTab('security')"
+          [class.bg-app-bg-alt]="activeTab() === 'security'"
+          [class.text-app-text-primary]="activeTab() === 'security'"
+          [class.text-app-text-secondary]="activeTab() !== 'security'"
+          class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-colors hover:bg-app-bg-alt hover:text-app-text-primary whitespace-nowrap text-[14px] font-medium cursor-pointer outline-none border-none text-left"
+        >
+          <tui-icon icon="@tui.lock" [style.height.rem]="1.1"></tui-icon>
+          Xavfsizlik va kirish
+        </button>
+
+        <button 
+          (click)="setTab('social')"
+          [class.bg-app-bg-alt]="activeTab() === 'social'"
+          [class.text-app-text-primary]="activeTab() === 'social'"
+          [class.text-app-text-secondary]="activeTab() !== 'social'"
+          class="flex items-center gap-3 px-4 py-2.5 rounded-xl transition-colors hover:bg-app-bg-alt hover:text-app-text-primary whitespace-nowrap text-[14px] font-medium cursor-pointer outline-none border-none text-left"
+        >
+          <tui-icon icon="@tui.link" [style.height.rem]="1.1"></tui-icon>
+          Ijtimoiy tarmoqlar
+        </button>
+      </nav>
+    </aside>
+
+    <!-- Right Content Area -->
+    <div class="flex-1 min-w-0">
+      @switch (activeTab()) {
+        <!-- PROFILE TAB -->
+        @case ('profile') {
+          <div class="flex flex-col gap-10">
+            <!-- Avatar & Cover (Minimalist) -->
+            <section>
+              <h2 class="text-base font-bold text-app-text-primary pb-3 mb-5 border-b border-app-border/50">Suratlar</h2>
+              
+              <div class="flex flex-col sm:flex-row gap-8 sm:gap-12">
+                <div class="flex flex-col gap-3">
+                  <span class="text-[13px] font-medium text-app-text-muted">Profil surati</span>
+                  <div class="flex items-center gap-4">
+                    <tui-avatar src="@tui.user" size="xl" tuiAvatarOutline class="w-16 h-16 border border-app-border!" />
+                    <button tuiButton appearance="secondary" size="s" class="font-medium! rounded-lg!">O'zgartirish</button>
+                  </div>
+                </div>
+                
+                <div class="flex flex-col gap-3 flex-1">
+                  <span class="text-[13px] font-medium text-app-text-muted">
+                    Muqova (Cover)
+                  </span>
+                  <div class="h-16 w-full max-w-sm rounded-xl bg-app-bg-alt border border-app-border/60 flex items-center justify-center cursor-pointer hover:bg-app-bg transition-colors relative overflow-hidden group">
+                    <span class="text-[13px] font-medium text-app-text-secondary group-hover:text-green-400 transition-colors">
+                      Yangi rasm tanlash
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <!-- Personal Logic -->
+            <section>
+              <h2 class="text-base font-bold text-app-text-primary pb-3 mb-5 border-b border-app-border/50">Shaxsiy ma'lumotlar</h2>
+              
+              <div class="flex flex-col gap-6 max-w-xl">
+                <div class="flex flex-col gap-1.5 focus-within:text-green-400 transition-colors">
+                  <label class="text-[13px] font-medium text-app-text-muted inherit-color">
+                    Ism va familiya
+                  </label>
+                  <input
+                    type="text"
+                    value="Lazizbek Hasanov"
+                    class="w-full bg-transparent border-b border-app-border/70 text-[15px] text-app-text-primary focus:border-green-400 outline-none transition-colors py-1.5 px-0 placeholder:text-app-text-muted/50"
+                    placeholder="Ismingiz"
+                  />
+                </div>
+
+                <div class="flex flex-col gap-1.5 focus-within:text-green-400 transition-colors">
+                  <label class="text-[13px] font-medium text-app-text-muted inherit-color">Foydalanuvchi nomi</label>
+                  <div class="relative flex items-center">
+                    <span class="absolute left-0 text-[15px] text-app-text-muted transition-colors pointer-events-none">
+                      thech.uz/
+                    </span>
+                    <input
+                      type="text"
+                      value="lazizbek"
+                      class="w-full bg-transparent border-b border-app-border/70 text-[15px] text-app-text-primary focus:border-green-400 outline-none transition-colors py-1.5 pl-17.5 pr-0 placeholder:text-app-text-muted/50"
+                      placeholder="username"
+                    />
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5 focus-within:text-green-400 transition-colors">
+                  <label class="text-[13px] font-medium text-app-text-muted inherit-color">
+                    O'zingiz haqingizda (Bio)
+                  </label>
+                  <textarea
+                    rows="3"
+                    class="w-full bg-transparent border-b border-app-border/70 text-[15px] text-app-text-primary focus:border-green-400 outline-none transition-colors py-1.5 px-0 placeholder:text-app-text-muted/50 resize-none leading-relaxed"
+                    placeholder="Tajribangiz, maqsadlaringiz..."
+                  >
+                    Frontend developer. Angular va web texnologiyalari haqida yozaman.
+                  </textarea>
+                </div>
+              </div>
+            </section>
+
+            <div class="flex max-w-xl pt-2 pb-10">
+              <button tuiButton appearance="primary" size="m" class="font-medium! rounded-xl! min-w-30">Saqlash</button>
+            </div>
+          </div>
+        }
+
+        <!-- SECURITY TAB -->
+        @case ('security') {
+          <div class="flex flex-col gap-10">
+            <!-- Email -->
+            <section>
+              <h2 class="text-base font-bold text-app-text-primary pb-3 mb-5 border-b border-app-border/50">Elektron pochta</h2>
+              
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 max-w-xl">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-[15px] text-app-text-primary">l.hasanov&#64;example.com</span>
+                  <span class="text-[13px] text-green-500 font-medium">Tasdiqlangan</span>
+                </div>
+                <button tuiButton appearance="secondary" size="s" class="font-medium! rounded-lg!">O'zgartirish</button>
+              </div>
+            </section>
+
+            <!-- Password -->
+            <section>
+              <h2 class="text-base font-bold text-app-text-primary pb-3 mb-5 border-b border-app-border/50">Parol</h2>
+              
+              <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-2 max-w-xl">
+                <div class="flex flex-col gap-0.5">
+                  <span class="text-[15px] text-app-text-primary">********</span>
+                  <span class="text-[13px] text-app-text-muted">So'nggi marta 2 oy oldin o'zgargan</span>
+                </div>
+                <button tuiButton appearance="secondary" size="s" class="font-medium! rounded-lg!">Yangi parol o'rnatish</button>
+              </div>
+            </section>
+
+            <!-- Connected Providers -->
+            <section>
+              <h2 class="text-base font-bold text-app-text-primary pb-3 mb-5 border-b border-app-border/50">Tashqi xizmatlar (Providers)</h2>
+              
+              <div class="flex flex-col gap-4 max-w-xl">
+                <!-- Google -->
+                <div class="flex items-center justify-between p-4 rounded-xl border border-app-border bg-app-bg">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-full bg-white flex items-center justify-center border border-gray-200 shadow-xs">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
+                        <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
+                        <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
+                        <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
+                      </svg>
+                    </div>
+                    <span class="text-[14px] font-medium text-app-text-primary">Google orqali ulangan</span>
+                  </div>
+                  <button tuiButton appearance="flat" size="s" class="font-medium! rounded-lg! text-red-500! hover:bg-red-500/10!">Uzish</button>
+                </div>
+
+                <!-- GitHub -->
+                <div class="flex items-center justify-between p-4 rounded-xl border border-transparent bg-app-bg-alt">
+                  <div class="flex items-center gap-3">
+                    <tui-icon icon="@tui.github" class="w-8 h-8 text-app-text-secondary" />
+                    <span class="text-[14px] font-medium text-app-text-secondary">GitHub</span>
+                  </div>
+                  <button tuiButton appearance="secondary" size="s" class="font-medium! rounded-lg!">Ulash</button>
+                </div>
+              </div>
+            </section>
+          </div>
+        }
+
+        <!-- SOCIAL TAB -->
+        @case ('social') {
+          <div class="flex flex-col gap-10">
+            <section>
+              <h2 class="text-base font-bold text-app-text-primary pb-3 mb-5 border-b border-app-border/50">Ijtimoiy sahifalar manzillari</h2>
+              
+              <div class="flex flex-col gap-6 max-w-xl">
+                <div class="flex items-center gap-4 focus-within:text-green-400 transition-colors">
+                  <tui-icon icon="@tui.github" [style.height.rem]="1.2" class="text-app-text-secondary inherit-color"></tui-icon>
+                  <input type="text" value="https://github.com/lazizbek" class="w-full bg-transparent border-b border-app-border/70 text-[15px] text-app-text-primary focus:border-green-400 outline-none transition-colors py-1.5 px-0 placeholder:text-app-text-muted/50" placeholder="https://github.com/..." />
+                </div>
+
+                <div class="flex items-center gap-4 focus-within:text-green-400 transition-colors">
+                  <tui-icon icon="@tui.twitter" [style.height.rem]="1.2" class="text-app-text-secondary inherit-color"></tui-icon>
+                  <input type="text" value="" class="w-full bg-transparent border-b border-app-border/70 text-[15px] text-app-text-primary focus:border-green-400 outline-none transition-colors py-1.5 px-0 placeholder:text-app-text-muted/50" placeholder="https://x.com/..." />
+                </div>
+
+                <div class="flex items-center gap-4 focus-within:text-green-400 transition-colors">
+                  <tui-icon icon="@tui.linkedin" [style.height.rem]="1.2" class="text-app-text-secondary inherit-color"></tui-icon>
+                  <input type="text" value="" class="w-full bg-transparent border-b border-app-border/70 text-[15px] text-app-text-primary focus:border-green-400 outline-none transition-colors py-1.5 px-0 placeholder:text-app-text-muted/50" placeholder="https://linkedin.com/in/..." />
+                </div>
+                
+                <div class="flex items-center gap-4 focus-within:text-green-400 transition-colors">
+                  <tui-icon icon="@tui.send" [style.height.rem]="1.2" class="text-app-text-secondary inherit-color"></tui-icon>
+                  <input type="text" value="https://t.me/lazizbek" class="w-full bg-transparent border-b border-app-border/70 text-[15px] text-app-text-primary focus:border-green-400 outline-none transition-colors py-1.5 px-0 placeholder:text-app-text-muted/50" placeholder="https://t.me/..." />
+                </div>
+              </div>
+            </section>
+            
+            <div class="flex max-w-xl pt-2 pb-10">
+              <button tuiButton appearance="primary" size="m" class="font-medium! rounded-xl! min-w-30">Saqlash</button>
+            </div>
+          </div>
+        }
+      }
+    </div>
+
+  </div>
+</div>
