@@ -18,11 +18,23 @@ export const mainRoutes: Routes = [
   },
   {
     path: 'profile/:user_name',
-    loadComponent: () => import('@features/profile-overview/profile-overview.component').then(m => m.ProfileOverviewComponent),
+    loadComponent: () => import('@features/profile/profile.component').then(m => m.ProfileComponent),
     resolve: { selectedUser: userResolver }
   },
   {
-    path: 'profile-settings',
-    loadComponent: () => import('@features/profile-settings/profile-settings.component').then(m => m.ProfileSettingsComponent)
+    path: 'settings',
+    loadComponent: () => import('@features/settings/settings.component').then(m => m.SettingsComponent)
+  },
+  {
+    path: 'about',
+    loadComponent: () => import('@features/about/about.component').then(m => m.AboutComponent)
+  },
+  {
+    path: 'authors',
+    loadComponent: () => import('@features/authors/authors.component').then(m => m.AuthorsComponent)
+  },
+  {
+    path: 'help',
+    loadComponent: () => import('@features/help/help.component').then(m => m.HelpComponent)
   }
 ];
