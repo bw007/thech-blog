@@ -46,12 +46,18 @@ export class HeaderComponent implements OnInit {
     return username ? `/profile/@${username}` : '';
   });
 
-  protected readonly menuItems = computed(() => [
+  protected readonly dropDownMenuItems = computed(() => [
     { icon: '@tui.user', label: 'Profil', route: this.profileUrl() },
     { icon: '@tui.notebook-pen', label: 'Maqolalarim', route: 'articles/my-articles' },
-    { icon: '@tui.message-circle-question-mark', label: 'Yordam', route: '#' },
-    { icon: '@tui.settings', label: 'Sozlamalar', route: 'profile-settings' },
+    { icon: '@tui.settings', label: 'Sozlamalar', route: 'settings' },
   ]);
+
+  protected readonly navMenuItems = [
+    { label: 'Bosh sahifa', route: '/' },
+    { label: 'Mualliflar', route: 'authors' },
+    { label: 'Loyiha haqida', route: 'about' },
+    { label: 'Yordam', route: 'help' },
+  ]
 
   ngOnInit(): void {
     this.router.events.pipe(
