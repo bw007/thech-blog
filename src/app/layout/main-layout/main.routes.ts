@@ -1,6 +1,7 @@
 import { Routes } from '@angular/router';
 import { articleResolver } from '@core/resolvers/article.resolver';
 import { userResolver } from "@core/resolvers/user.resolver";
+import { authorsResolver } from "@core/resolvers/authors.resolver";
 
 export const mainRoutes: Routes = [
   {
@@ -31,7 +32,8 @@ export const mainRoutes: Routes = [
   },
   {
     path: 'authors',
-    loadComponent: () => import('@features/authors/authors.component').then(m => m.AuthorsComponent)
+    loadComponent: () => import('@features/authors/authors.component').then(m => m.AuthorsComponent),
+    resolve: { authors: authorsResolver }
   },
   {
     path: 'help',
