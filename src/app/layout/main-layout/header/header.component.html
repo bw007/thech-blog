@@ -1,5 +1,5 @@
 <header class="sticky top-0 z-50 backdrop-blur-md border-b border-app-border bg-app-bg/80">
-  <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4 md:gap-8">
+  <div class="max-w-7xl mx-auto px-4 md:px-6 h-16 flex items-center justify-between gap-4 md:gap-6 lg:gap-8">
     <div class="flex items-center gap-4">
       <button
         (click)="open.set(true)"
@@ -11,12 +11,14 @@
     </div>
 
     <nav class="hidden md:flex items-center gap-1 flex-1">
+      @for (item of navMenuItems; track item) {
       <a
-        routerLink="/"
+        [routerLink]="item.route"
         class="px-3 py-1.5 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
       >
-        Bosh sahifa
+        {{ item.label }}
       </a>
+      }
     </nav>
 
     <div class="flex items-center gap-2">
@@ -34,12 +36,13 @@
       <button
         tuiButton
         appearance="flat"
+        title="Maqola yozish"
         class="text-app-text-primary! flex items-center gap-1! sm:gap-2! px-2! sm:px-4! hover:opacity-75!"
         size="s"
         routerLink="editor"
       >
         <tui-icon icon="@tui.notebook-pen" [style.height.rem]="1" />
-        <span class="hidden sm:inline">Maqola yozish</span>
+        <span class="hidden lg:inline">Maqola yozish</span>
       </button>
 
       @if (isLoggedIn() || isLoading()) {
@@ -85,7 +88,7 @@
 
   <tui-data-list tuiDataListDropdownManager size="m">
     <tui-opt-group>
-      @for (item of menuItems(); track item.route) {
+      @for (item of dropDownMenuItems(); track item.route) {
       <button
         tuiOption
         new
@@ -141,12 +144,14 @@
   </header>
   <div class="flex flex-col h-full">
     <div class="flex flex-col gap-1">
+      @for (item of navMenuItems; track item) {
       <a
-        routerLink="/"
-        class="px-3 py-2 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
+        [routerLink]="item.route"
+        class="px-3 py-1.5 rounded-lg text-sm text-app-text-secondary hover:text-app-text-primary hover:bg-app-bg-alt transition-colors no-underline"
       >
-        Bosh sahifa
+        {{ item.label }}
       </a>
+      }
     </div>
 
     <div class="my-6">
